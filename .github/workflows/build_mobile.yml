@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "${{ secrets.ENV_CONTENT }}" > .env
 
-      - name: Compilar APK (Modo Release)
+      - name: Compilar APK
         run: flutter build apk --release
 
       - name: Guardar el APK como artefacto de descarga
@@ -59,11 +59,18 @@ jobs:
         run: |
           echo "${{ secrets.ENV_CONTENT }}" > .env
 
-      - name: Compilar IPA de iOS (Sin Firmar)
-        run: flutter build ipa --no-codesign
+      - name: Compilar iOS
+        run: flutter build ios --release --no-codesign
 
-      - name: Guardar la carpeta de iOS como artefacto de descarga
+      - name: Empaquetar a formato .ipa manualmente
+        run: |
+          mkdir -p build/ios/iphoneos/Payload
+          mv build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/
+          cd build/ios/iphoneos
+          zip -r ios-app-unsigned.ipa Payload
+
+      - name: Guardar el IPA como artefacto de descarga
         uses: actions/upload-artifact@v4
         with:
           name: ios-app-release
-          path: build/ios/ipa/
+          path: build/ios/iphoneos/ios-app-unsigned.ipa
