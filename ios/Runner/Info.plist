@@ -66,5 +66,15 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Necesitamos acceder a tu ubicación para mostrar tu posición exacta en el mapa.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Necesitamos acceder a tu ubicación para trazar tus rutas.</string>
+
+    <key>NSCameraUsageDescription</key>
+    <string>Necesitamos acceso a la cámara para escanear códigos de asistencia QR y capturar fotos para tus reportes.</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Necesitamos acceso a tu galería para que puedas seleccionar y adjuntar imágenes a tus publicaciones.</string>
 </dict>
 </plist>
