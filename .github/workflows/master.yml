@@ -1,0 +1,104 @@
+name: Construcción Master (CI/CD)
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  validate:
+    name: Validar Código (Format, Lint & Sec)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Verificar Formato de Código
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analizar Código (Linter)
+        run: flutter analyze
+
+      - name: Escaneo de Vulnerabilidades (OSV)
+        uses: google/osv-scanner-action/osv-scanner-action@v1.9.0
+        with:
+          scan-args: |-
+            --lockfile=pubspec.lock
+
+  build-android:
+    name: Construcción Android (APK)
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Crear archivo .env desde GitHub Secrets
+        run: echo "${{ secrets.ENV_CONTENT }}" > .env
+
+      - name: Compilar APK (Release)
+        run: flutter build apk --release
+
+      - name: Subir artefacto Android
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-app-release
+          path: build/app/outputs/flutter-apk/app-release.apk
+
+  build-ios:
+    name: Construcción iOS (IPA)
+    needs: validate
+    runs-on: macos-latest
+    steps:
+      - name: Descargar el código
+        uses: actions/checkout@v4
+
+      - name: Configurar Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+
+      - name: Instalar dependencias
+        run: flutter pub get
+
+      - name: Crear archivo .env desde GitHub Secrets
+        run: echo "${{ secrets.ENV_CONTENT }}" > .env
+
+      - name: Compilar iOS (Release sin firma)
+        run: flutter build ios --release --no-codesign
+
+      - name: Empaquetar a IPA
+        run: |
+          mkdir -p build/ios/iphoneos/Payload
+          mv build/ios/iphoneos/Runner.app build/ios/iphoneos/Payload/
+          cd build/ios/iphoneos
+          zip -r ios-app-unsigned.ipa Payload
+
+      - name: Subir artefacto iOS
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-app-release
+          path: build/ios/iphoneos/ios-app-unsigned.ipa

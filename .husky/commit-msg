@@ -1,0 +1,35 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Regex para validar Conventional Commits
+PATTERN="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-zA-Z0-9_-]+\))?: .+"
+
+# El primer argumento de este hook es el archivo que contiene el mensaje
+COMMIT_MSG_FILE=$1
+
+# Comprobar si el mensaje coincide con el patrón
+if ! grep -qE "$PATTERN" "$COMMIT_MSG_FILE"; then
+  echo ""
+  echo "❌ Error: El formato del mensaje de commit es inválido."
+  echo ""
+  echo "Debes usar el estándar de Conventional Commits:"
+  echo "  <tipo>: <mensaje corto en imperativo>"
+  echo "  <tipo>(<alcance>): <mensaje corto en imperativo>"
+  echo ""
+  echo "Tipos permitidos:"
+  echo "  feat     : Nueva funcionalidad"
+  echo "  fix      : Corrección de un bug"
+  echo "  docs     : Cambios en la documentación"
+  echo "  style    : Cambios de formato (espacios, comas, etc)"
+  echo "  refactor : Refactorización del código"
+  echo "  perf     : Mejora de rendimiento"
+  echo "  test     : Añadir o corregir pruebas"
+  echo "  build    : Cambios en el sistema de compilación o dependencias"
+  echo "  ci       : Cambios en integración continua"
+  echo "  chore    : Tareas de mantenimiento (ej. actualizar librerías)"
+  echo "  revert   : Revertir un commit anterior"
+  echo ""
+  echo "Ejemplo correcto: feat(auth): añadir pantalla de login"
+  echo ""
+  exit 1
+fi

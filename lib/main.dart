@@ -11,11 +11,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: const MaterialApp(
-        home: Scaffold(
-          body: Center(
-            child: Text('Hello World!'),
-          ),
-        ),
+        home: Scaffold(body: Center(child: Text('Hello World!'))),
       ),
     );
   }
