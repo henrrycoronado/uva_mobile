@@ -77,5 +77,8 @@
     "confirmPasswordLabel": "Confirmar Contraseña",
     "passwordsDoNotMatch": "Las contraseñas no coinciden",
     "alreadyHaveAccount": "¿Ya tienes cuenta? Inicia sesión",
-    "dontHaveAccount": "¿No tienes cuenta? Regístrate"
+    "dontHaveAccount": "¿No tienes cuenta? Regístrate",
+    "navPrograms": "Programas",
+    "navHome": "Inicio",
+    "navProfile": "Perfil"
 }

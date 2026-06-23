@@ -6,7 +6,7 @@
 
     <uses-permission android:name="android:permission:CAMERA" />
     <application
-        android:label="uva_mobile"
+        android:label="UvoluntApp"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

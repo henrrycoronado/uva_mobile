@@ -77,5 +77,8 @@
     "confirmPasswordLabel": "Confirm Password",
     "passwordsDoNotMatch": "Passwords do not match",
     "alreadyHaveAccount": "Already have an account? Login",
-    "dontHaveAccount": "Don't have an account? Register"
+    "dontHaveAccount": "Don't have an account? Register",
+    "navPrograms": "Programs",
+    "navHome": "Home",
+    "navProfile": "Profile"
 }
