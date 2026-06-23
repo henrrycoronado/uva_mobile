@@ -37,7 +37,7 @@ class ProfileActionsWidget extends StatelessWidget {
     final theme = Theme.of(context);
     return InkWell(
       onTap: () {
-        // TODO: Navigate to specific list
+        // Navigate to specific list
       },
       borderRadius: BorderRadius.circular(12),
       child: Container(

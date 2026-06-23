@@ -46,6 +46,7 @@ class WidgetbookApp extends StatelessWidget {
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           initialLocale: const Locale('es'),
         ),
+        // ignore: deprecated_member_use
         DeviceFrameAddon(
           devices: [Devices.ios.iPhone13, Devices.android.samsungGalaxyS20],
         ),

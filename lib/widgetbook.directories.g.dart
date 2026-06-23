@@ -22,6 +22,14 @@ import 'package:uva_mobile/core/widgets/profile/profile_details_widget.widgetboo
     as _uva_mobile_core_widgets_profile_profile_details_widget_widgetbook;
 import 'package:uva_mobile/core/widgets/profile/profile_settings_widget.widgetbook.dart'
     as _uva_mobile_core_widgets_profile_profile_settings_widget_widgetbook;
+import 'package:uva_mobile/core/widgets/programs/create_program_form_widget.widgetbook.dart'
+    as _uva_mobile_core_widgets_programs_create_program_form_widget_widgetbook;
+import 'package:uva_mobile/core/widgets/programs/edit_program_form_widget.widgetbook.dart'
+    as _uva_mobile_core_widgets_programs_edit_program_form_widget_widgetbook;
+import 'package:uva_mobile/core/widgets/programs/program_card_widget.widgetbook.dart'
+    as _uva_mobile_core_widgets_programs_program_card_widget_widgetbook;
+import 'package:uva_mobile/core/widgets/programs/program_details_widget.widgetbook.dart'
+    as _uva_mobile_core_widgets_programs_program_details_widget_widgetbook;
 import 'package:uva_mobile/features/catalogs/views/catalog_selector_widget.widgetbook.dart'
     as _uva_mobile_features_catalogs_views_catalog_selector_widget_widgetbook;
 import 'package:widgetbook/widgetbook.dart' as _widgetbook;
@@ -119,6 +127,67 @@ final directories = <_widgetbook.WidgetbookNode>[
                     builder:
                         _uva_mobile_core_widgets_profile_profile_settings_widget_widgetbook
                             .buildProfileSettingsWidgetUseCase,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          _widgetbook.WidgetbookFolder(
+            name: 'programs',
+            children: [
+              _widgetbook.WidgetbookComponent(
+                name: 'CreateProgramFormWidget',
+                useCases: [
+                  _widgetbook.WidgetbookUseCase(
+                    name: 'Default',
+                    builder:
+                        _uva_mobile_core_widgets_programs_create_program_form_widget_widgetbook
+                            .buildCreateProgramFormWidgetUseCase,
+                  ),
+                  _widgetbook.WidgetbookUseCase(
+                    name: 'Loading',
+                    builder:
+                        _uva_mobile_core_widgets_programs_create_program_form_widget_widgetbook
+                            .buildCreateProgramFormWidgetLoadingUseCase,
+                  ),
+                ],
+              ),
+              _widgetbook.WidgetbookComponent(
+                name: 'EditProgramFormWidget',
+                useCases: [
+                  _widgetbook.WidgetbookUseCase(
+                    name: 'Default',
+                    builder:
+                        _uva_mobile_core_widgets_programs_edit_program_form_widget_widgetbook
+                            .buildEditProgramFormWidgetUseCase,
+                  ),
+                ],
+              ),
+              _widgetbook.WidgetbookComponent(
+                name: 'ProgramCardWidget',
+                useCases: [
+                  _widgetbook.WidgetbookUseCase(
+                    name: 'Default',
+                    builder:
+                        _uva_mobile_core_widgets_programs_program_card_widget_widgetbook
+                            .buildProgramCardWidgetUseCase,
+                  ),
+                  _widgetbook.WidgetbookUseCase(
+                    name: 'No Acronym or Description',
+                    builder:
+                        _uva_mobile_core_widgets_programs_program_card_widget_widgetbook
+                            .buildProgramCardWidgetMinimalUseCase,
+                  ),
+                ],
+              ),
+              _widgetbook.WidgetbookComponent(
+                name: 'ProgramDetailsWidget',
+                useCases: [
+                  _widgetbook.WidgetbookUseCase(
+                    name: 'Default',
+                    builder:
+                        _uva_mobile_core_widgets_programs_program_details_widget_widgetbook
+                            .buildProgramDetailsWidgetUseCase,
                   ),
                 ],
               ),
