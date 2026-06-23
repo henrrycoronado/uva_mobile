@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/utils/validators.dart';
-import '../../../features/auth/viewmodels/register_view_model.dart';
 import '../../../l10n/app_localizations.dart';
 import '../common/custom_button.dart';
 import '../common/custom_text_field.dart';
 
-class RegisterForm extends ConsumerStatefulWidget {
-  const RegisterForm({super.key});
+class RegisterForm extends StatefulWidget {
+  final bool isLoading;
+  final void Function(String firstName, String lastName, String email, String password) onRegister;
+
+  const RegisterForm({
+    super.key,
+    this.isLoading = false,
+    required this.onRegister,
+  });
 
   @override
-  ConsumerState<RegisterForm> createState() => _RegisterFormState();
+  State<RegisterForm> createState() => _RegisterFormState();
 }
 
-class _RegisterFormState extends ConsumerState<RegisterForm> {
+class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -36,21 +41,18 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
 
   void _onRegisterPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      ref
-          .read(registerViewModelProvider.notifier)
-          .register(
-            _firstNameController.text.trim(),
-            _lastNameController.text.trim(),
-            _emailController.text.trim(),
-            _passwordController.text,
-          );
+      widget.onRegister(
+        _firstNameController.text.trim(),
+        _lastNameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final authState = ref.watch(registerViewModelProvider);
     final theme = Theme.of(context);
 
     return Padding(
@@ -131,7 +133,7 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
               const SizedBox(height: 32),
               CustomButton(
                 text: l10n.register,
-                isLoading: authState.isLoading,
+                isLoading: widget.isLoading,
                 onPressed: _onRegisterPressed,
               ),
               const SizedBox(height: 16),
@@ -152,3 +154,4 @@ class _RegisterFormState extends ConsumerState<RegisterForm> {
     );
   }
 }
+

@@ -17,6 +17,7 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final authState = ref.watch(loginViewModelProvider);
 
     ref.listen<AsyncValue<void>>(loginViewModelProvider, (_, state) {
       state.whenOrNull(
@@ -49,14 +50,16 @@ class LoginScreen extends ConsumerWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  'assets/images/Logo2.svg',
-                  height: 120,
-                  // Color opcional según el tema si es monocromático
-                  // colorFilter: ColorFilter.mode(theme.colorScheme.onSurface, BlendMode.srcIn),
-                ),
+                SvgPicture.asset('assets/images/Logo2.svg', height: 120),
                 const SizedBox(height: 48),
-                const LoginForm(),
+                LoginForm(
+                  isLoading: authState.isLoading,
+                  onLogin: (email, password) {
+                    ref
+                        .read(loginViewModelProvider.notifier)
+                        .login(email, password);
+                  },
+                ),
               ],
             ),
           ),

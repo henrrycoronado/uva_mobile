@@ -1,21 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../l10n/app_localizations.dart';
-import '../../theme/locale_provider.dart';
-import '../../theme/text_scale_provider.dart';
-import '../../theme/theme_provider.dart';
 
-class ProfileSettingsWidget extends ConsumerStatefulWidget {
-  const ProfileSettingsWidget({super.key});
+class ProfileSettingsWidget extends StatefulWidget {
+  final Locale currentLocale;
+  final ThemeMode currentTheme;
+  final double currentTextScale;
+  final ValueChanged<String> onChangeLocale;
+  final ValueChanged<ThemeMode> onChangeTheme;
+  final ValueChanged<String> onChangeTextScale;
+
+  const ProfileSettingsWidget({
+    super.key,
+    required this.currentLocale,
+    required this.currentTheme,
+    required this.currentTextScale,
+    required this.onChangeLocale,
+    required this.onChangeTheme,
+    required this.onChangeTextScale,
+  });
 
   @override
-  ConsumerState<ProfileSettingsWidget> createState() =>
-      _ProfileSettingsWidgetState();
+  State<ProfileSettingsWidget> createState() => _ProfileSettingsWidgetState();
 }
 
-class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
+class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
   Map<Permission, PermissionStatus> _permissionsStatus = {};
 
   @override
@@ -45,14 +55,10 @@ class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    final themeMode = ref.watch(themeProvider);
-    final locale = ref.watch(localeProvider);
-    final textScale = ref.watch(textScaleProvider);
-
     // Map textScale double to string for dropdown
     String textScaleStr = 'normal';
-    if (textScale == 0.85) textScaleStr = 'small';
-    if (textScale == 1.15) textScaleStr = 'large';
+    if (widget.currentTextScale == 0.85) textScaleStr = 'small';
+    if (widget.currentTextScale == 1.15) textScaleStr = 'large';
 
     return Card(
       elevation: 0,
@@ -77,7 +83,7 @@ class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
             leading: const Icon(Icons.language),
             title: Text(l10n.settingsLanguage),
             trailing: DropdownButton<String>(
-              value: locale.languageCode == 'es' ? 'es' : 'en',
+              value: widget.currentLocale.languageCode == 'es' ? 'es' : 'en',
               underline: const SizedBox(),
               items: [
                 DropdownMenuItem(
@@ -90,9 +96,7 @@ class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
                 ),
               ],
               onChanged: (val) {
-                if (val != null) {
-                  ref.read(localeProvider.notifier).changeLocale(val);
-                }
+                if (val != null) widget.onChangeLocale(val);
               },
             ),
           ),
@@ -100,7 +104,7 @@ class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
             leading: const Icon(Icons.dark_mode),
             title: Text(l10n.settingsTheme),
             trailing: DropdownButton<ThemeMode>(
-              value: themeMode,
+              value: widget.currentTheme,
               underline: const SizedBox(),
               items: [
                 DropdownMenuItem(
@@ -117,9 +121,7 @@ class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
                 ),
               ],
               onChanged: (val) {
-                if (val != null) {
-                  ref.read(themeProvider.notifier).changeTheme(val);
-                }
+                if (val != null) widget.onChangeTheme(val);
               },
             ),
           ),
@@ -140,15 +142,11 @@ class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
                 ),
                 DropdownMenuItem(
                   value: 'large',
-                  child: Text(
-                    'Grande',
-                  ), // Reusing custom string or 'Big' if there's no localization for large. Wait I will use l10n.settingsFontBig
+                  child: Text(l10n.settingsFontBig),
                 ),
               ],
               onChanged: (val) {
-                if (val != null) {
-                  ref.read(textScaleProvider.notifier).changeScale(val);
-                }
+                if (val != null) widget.onChangeTextScale(val);
               },
             ),
           ),
@@ -224,3 +222,4 @@ class _ProfileSettingsWidgetState extends ConsumerState<ProfileSettingsWidget> {
     );
   }
 }
+

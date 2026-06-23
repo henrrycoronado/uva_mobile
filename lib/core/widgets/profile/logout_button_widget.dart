@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../features/auth/repositories/auth_repository.dart';
 import '../../../../l10n/app_localizations.dart';
-import '../../providers/secure_storage_provider.dart';
-import '../../router/app_routes.dart';
 
-class LogoutButtonWidget extends ConsumerWidget {
-  const LogoutButtonWidget({super.key});
+class LogoutButtonWidget extends StatelessWidget {
+  final VoidCallback onLogout;
+
+  const LogoutButtonWidget({super.key, required this.onLogout});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
     return SizedBox(
@@ -20,21 +17,11 @@ class LogoutButtonWidget extends ConsumerWidget {
           backgroundColor: Colors.red.withValues(alpha: 0.1),
           foregroundColor: Colors.red,
         ),
-        onPressed: () async {
-          final repo = ref.read(authRepositoryProvider);
-          final storage = ref.read(secureStorageProvider);
-          try {
-            await repo.logout();
-          } catch (_) {}
-          await storage.deleteToken();
-          await storage.deleteRefreshToken();
-          if (context.mounted) {
-            context.go(AppRoutes.login);
-          }
-        },
+        onPressed: onLogout,
         icon: const Icon(Icons.logout),
         label: Text(l10n.logout),
       ),
     );
   }
 }
+

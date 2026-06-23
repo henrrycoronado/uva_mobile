@@ -63,6 +63,20 @@ Generador de Código Activo (Indispensable para Riverpod y Hive CE): Dado que el
 dart run build_runner watch --delete-conflicting-outputs
 ```
 
+### Catálogo Visual de Componentes UI (Widgetbook)
+El proyecto utiliza [Widgetbook](https://widgetbook.io/) como entorno aislado para construir y probar componentes UI (Dumb Components) de forma independiente a la lógica de negocio de la aplicación.
+
+Para iniciar el catálogo visual de componentes:
+```bash
+flutter run -t lib/widgetbook.dart
+```
+```bash
+flutter run -t lib/widgetbook.dart -d chrome
+```
+*(Se recomienda ejecutar este comando en un Emulador de Android o Simulador de iOS, ya que el proyecto no tiene soporte oficial para Web configurado).*
+
+Para añadir nuevos componentes al catálogo, utiliza la anotación `@widgetbook.UseCase` sobre una función constructora de tu widget y vuelve a ejecutar el `build_runner`.
+
 🛠️ Solución de Problemas Locales (Troubleshooting)
 Error de Renderizado Gráfico (E/gralloc4 o pantallas en negro)
 En ciertos dispositivos físicos (especialmente aquellos con capas de personalización como HiOS/XOS y procesadores MediaTek/Mali), el nuevo motor gráfico por defecto de Flutter (Impeller) puede presentar conflictos con los controladores de video al inicializar la cámara o los mapas, provocando bloqueos o cierres.

@@ -3,8 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/network/exceptions/offline_no_profile_exception.dart';
+import '../../../core/providers/secure_storage_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/theme/locale_provider.dart';
+import '../../../core/theme/text_scale_provider.dart';
+import '../../../core/theme/theme_provider.dart';
 import '../../../core/widgets/profile/logout_button_widget.dart';
 import '../../../core/widgets/profile/profile_actions_widget.dart';
 import '../../../core/widgets/profile/profile_details_widget.dart';
@@ -34,28 +38,32 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     super.initState();
     Future.microtask(() {
       if (!mounted) return;
-      ref.read(catalogsViewModelProvider.notifier).fetchTypeCatalog(CatalogTypeGroup.career);
+      ref
+          .read(catalogsViewModelProvider.notifier)
+          .fetchTypeCatalog(CatalogTypeGroup.career);
     });
   }
 
   Future<void> _handleSaveProfile(UpdateProfileDto dto) async {
     final repo = ref.read(profileRepositoryProvider);
     await repo.updateProfile(dto);
-    
+
     // Refresh global states
     await ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true);
-    await ref.read(profileViewModelProvider.notifier).refresh(forceRefresh: true);
+    await ref
+        .read(profileViewModelProvider.notifier)
+        .refresh(forceRefresh: true);
   }
 
   Future<void> _handlePhotoUpload(String filePath) async {
     final repo = ref.read(profileRepositoryProvider);
     await repo.updateProfilePhoto(filePath);
 
-    // Refresh global state to get new URL
     await ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true);
-    await ref.read(profileViewModelProvider.notifier).refresh(forceRefresh: true);
+    await ref
+        .read(profileViewModelProvider.notifier)
+        .refresh(forceRefresh: true);
 
-    // Clear Flutter's image cache and update version to force UI refresh
     PaintingBinding.instance.imageCache.clear();
     PaintingBinding.instance.imageCache.clearLiveImages();
 
@@ -71,9 +79,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final profileStateAsync = ref.watch(profileViewModelProvider);
-    
+
     final catalogsState = ref.watch(catalogsViewModelProvider);
-    final careerOptions = catalogsState.cachedTypes[CatalogTypeGroup.career] ?? [];
+    final careerOptions =
+        catalogsState.cachedTypes[CatalogTypeGroup.career] ?? [];
 
     return Scaffold(
       appBar: AppBar(
@@ -91,8 +100,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       body: profileStateAsync.when(
         data: (profile) {
           return RefreshIndicator(
-            onRefresh: () =>
-                ref.read(profileViewModelProvider.notifier).refresh(forceRefresh: true),
+            onRefresh: () => ref
+                .read(profileViewModelProvider.notifier)
+                .refresh(forceRefresh: true),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16.0),
@@ -110,11 +120,34 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   const SizedBox(height: 24),
                   const ProfileActionsWidget(),
                   const SizedBox(height: 24),
-                  const ProfileSettingsWidget(),
+                  ProfileSettingsWidget(
+                    currentLocale: ref.watch(localeProvider),
+                    currentTheme: ref.watch(themeProvider),
+                    currentTextScale: ref.watch(textScaleProvider),
+                    onChangeLocale: (val) =>
+                        ref.read(localeProvider.notifier).changeLocale(val),
+                    onChangeTheme: (val) =>
+                        ref.read(themeProvider.notifier).changeTheme(val),
+                    onChangeTextScale: (val) =>
+                        ref.read(textScaleProvider.notifier).changeScale(val),
+                  ),
                   const SizedBox(height: 24),
                   const PortfolioContactView(),
                   const SizedBox(height: 32),
-                  const LogoutButtonWidget(),
+                  LogoutButtonWidget(
+                    onLogout: () async {
+                      final repo = ref.read(authRepositoryProvider);
+                      final storage = ref.read(secureStorageProvider);
+                      try {
+                        await repo.logout();
+                      } catch (_) {}
+                      await storage.deleteToken();
+                      await storage.deleteRefreshToken();
+                      if (context.mounted) {
+                        context.go(AppRoutes.login);
+                      }
+                    },
+                  ),
                   const SizedBox(height: 16),
                 ],
               ),
@@ -149,8 +182,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 const SizedBox(height: 10),
                 Text(err.toString(), textAlign: TextAlign.center),
                 TextButton(
-                  onPressed: () =>
-                      ref.read(profileViewModelProvider.notifier).refresh(forceRefresh: true),
+                  onPressed: () => ref
+                      .read(profileViewModelProvider.notifier)
+                      .refresh(forceRefresh: true),
                   child: const Text('Reintentar'),
                 ),
               ],
@@ -161,4 +195,3 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 }
-

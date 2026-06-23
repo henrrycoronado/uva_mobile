@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/utils/validators.dart';
-import '../../../features/auth/viewmodels/login_view_model.dart';
 import '../../../l10n/app_localizations.dart';
 import '../common/custom_button.dart';
 import '../common/custom_text_field.dart';
 
-class LoginForm extends ConsumerStatefulWidget {
-  const LoginForm({super.key});
+class LoginForm extends StatefulWidget {
+  final bool isLoading;
+  final void Function(String email, String password) onLogin;
+
+  const LoginForm({
+    super.key,
+    this.isLoading = false,
+    required this.onLogin,
+  });
 
   @override
-  ConsumerState<LoginForm> createState() => _LoginFormState();
+  State<LoginForm> createState() => _LoginFormState();
 }
 
-class _LoginFormState extends ConsumerState<LoginForm> {
+class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -30,16 +35,16 @@ class _LoginFormState extends ConsumerState<LoginForm> {
 
   void _onLoginPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      ref
-          .read(loginViewModelProvider.notifier)
-          .login(_emailController.text.trim(), _passwordController.text);
+      widget.onLogin(
+        _emailController.text.trim(),
+        _passwordController.text,
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final authState = ref.watch(loginViewModelProvider);
     final theme = Theme.of(context);
 
     return Padding(
@@ -84,7 +89,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               const SizedBox(height: 32),
               CustomButton(
                 text: l10n.login,
-                isLoading: authState.isLoading,
+                isLoading: widget.isLoading,
                 onPressed: _onLoginPressed,
               ),
               const SizedBox(height: 16),
@@ -99,3 +104,4 @@ class _LoginFormState extends ConsumerState<LoginForm> {
     );
   }
 }
+

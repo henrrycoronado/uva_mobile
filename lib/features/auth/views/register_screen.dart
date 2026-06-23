@@ -17,6 +17,7 @@ class RegisterScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final authState = ref.watch(registerViewModelProvider);
 
     ref.listen<AsyncValue<void>>(registerViewModelProvider, (_, state) {
       state.whenOrNull(
@@ -52,7 +53,14 @@ class RegisterScreen extends ConsumerWidget {
                 const SizedBox(height: 24),
                 SvgPicture.asset('assets/images/Logo2.svg', height: 120),
                 const SizedBox(height: 32),
-                const RegisterForm(),
+                RegisterForm(
+                  isLoading: authState.isLoading,
+                  onRegister: (firstName, lastName, email, password) {
+                    ref
+                        .read(registerViewModelProvider.notifier)
+                        .register(firstName, lastName, email, password);
+                  },
+                ),
                 const SizedBox(height: 24),
               ],
             ),
@@ -62,3 +70,4 @@ class RegisterScreen extends ConsumerWidget {
     );
   }
 }
+

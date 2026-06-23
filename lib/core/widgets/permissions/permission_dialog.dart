@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../l10n/app_localizations.dart';
-import '../../providers/permission_provider.dart';
 
-class PermissionDialog extends ConsumerWidget {
+class PermissionDialog extends StatelessWidget {
   final String title;
   final String description;
   final IconData icon;
+  final VoidCallback onGoToSettings;
 
   const PermissionDialog({
     super.key,
     required this.title,
     required this.description,
     required this.icon,
+    required this.onGoToSettings,
   });
 
   static Future<void> show(
@@ -21,17 +21,23 @@ class PermissionDialog extends ConsumerWidget {
     required String title,
     required String description,
     required IconData icon,
+    required VoidCallback onGoToSettings,
   }) {
     return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (ctx) =>
-          PermissionDialog(title: title, description: description, icon: icon),
+          PermissionDialog(
+            title: title, 
+            description: description, 
+            icon: icon, 
+            onGoToSettings: onGoToSettings,
+          ),
     );
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return AlertDialog(
@@ -59,12 +65,9 @@ class PermissionDialog extends ConsumerWidget {
           child: Text(AppLocalizations.of(context)!.cancel),
         ),
         ElevatedButton(
-          onPressed: () async {
-            final permissionService = ref.read(permissionServiceProvider);
-            await permissionService.openSettings();
-            if (context.mounted) {
-              Navigator.of(context).pop();
-            }
+          onPressed: () {
+            onGoToSettings();
+            Navigator.of(context).pop();
           },
           child: Text(AppLocalizations.of(context)!.goToSettings),
         ),
@@ -72,3 +75,4 @@ class PermissionDialog extends ConsumerWidget {
     );
   }
 }
+
