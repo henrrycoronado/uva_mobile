@@ -63,3 +63,6 @@ GoogleService-Info.plist
 
 # Reportes de errores de Flutter
 flutter_*.log
+
+# Código Autogenerado de Internacionalización (i18n)
+/lib/l10n/app_localizations*.dart

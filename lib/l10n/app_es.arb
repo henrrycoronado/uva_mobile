@@ -1,0 +1,13 @@
+{
+    "@@locale": "es",
+    "appTitle": "U-VoluntApp",
+    "accept": "Aceptar",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "emailLabel": "Correo Electrónico",
+    "passwordLabel": "Contraseña",
+    "settings": "Configuraciones",
+    "language": "Idioma"
+}

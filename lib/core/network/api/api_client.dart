@@ -1,0 +1,149 @@
+import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+
+import '../../local_storage/secure/i_secure_storage.dart';
+import '../models/api_exceptions.dart';
+import 'i_api_client.dart';
+
+class ApiClient implements IApiClient {
+  final String _baseUrl;
+  final http.Client _client;
+  final ISecureStorage secureStorage;
+
+  ApiClient({http.Client? client, required this.secureStorage})
+    : _baseUrl = dotenv.env['API_URL'] ?? 'http://localhost:3000/api/v1',
+      _client = client ?? http.Client();
+
+  @override
+  Future<Map<String, dynamic>> get(
+    String endpoint, {
+    Map<String, String>? headers,
+  }) async {
+    final response = await _client.get(
+      Uri.parse('$_baseUrl$endpoint'),
+      headers: await _buildHeaders(headers),
+    );
+    return _handleResponse(response);
+  }
+
+  @override
+  Future<Map<String, dynamic>> post(
+    String endpoint, {
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
+    final response = await _client.post(
+      Uri.parse('$_baseUrl$endpoint'),
+      headers: await _buildHeaders(headers),
+      body: body != null ? jsonEncode(body) : null,
+    );
+    return _handleResponse(response);
+  }
+
+  @override
+  Future<Map<String, dynamic>> put(
+    String endpoint, {
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
+    final response = await _client.put(
+      Uri.parse('$_baseUrl$endpoint'),
+      headers: await _buildHeaders(headers),
+      body: body != null ? jsonEncode(body) : null,
+    );
+    return _handleResponse(response);
+  }
+
+  @override
+  Future<Map<String, dynamic>> patch(
+    String endpoint, {
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
+    final response = await _client.patch(
+      Uri.parse('$_baseUrl$endpoint'),
+      headers: await _buildHeaders(headers),
+      body: body != null ? jsonEncode(body) : null,
+    );
+    return _handleResponse(response);
+  }
+
+  @override
+  Future<void> delete(String endpoint, {Map<String, String>? headers}) async {
+    final response = await _client.delete(
+      Uri.parse('$_baseUrl$endpoint'),
+      headers: await _buildHeaders(headers),
+    );
+    _handleResponse(response, isDelete: true);
+  }
+
+  Future<Map<String, String>> _buildHeaders(
+    Map<String, String>? customHeaders,
+  ) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    };
+
+    final token = await secureStorage.getToken();
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+
+    if (customHeaders != null) {
+      headers.addAll(customHeaders);
+    }
+    return headers;
+  }
+
+  dynamic _handleResponse(http.Response response, {bool isDelete = false}) {
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      if (isDelete || response.body.isEmpty) return <String, dynamic>{};
+      try {
+        return jsonDecode(response.body);
+      } catch (_) {
+        return <String, dynamic>{};
+      }
+    } else {
+      ProblemDetails? problem;
+      try {
+        final decoded = jsonDecode(response.body);
+        if (decoded is Map<String, dynamic>) {
+          problem = ProblemDetails.fromJson(decoded);
+        }
+      } catch (_) {
+        throw ApiException(
+          "respuesta no valida",
+          statusCode: response.statusCode,
+          problemDetails: problem,
+        );
+      }
+
+      final message =
+          problem?.detail ??
+          problem?.title ??
+          'Error HTTP ${response.statusCode}';
+
+      switch (response.statusCode) {
+        case 400:
+          throw BadRequestException(message, problemDetails: problem);
+        case 401:
+          throw UnauthorizedException(message, problemDetails: problem);
+        case 403:
+          throw ForbiddenException(message, problemDetails: problem);
+        case 404:
+          throw NotFoundException(message, problemDetails: problem);
+        default:
+          if (response.statusCode >= 500) {
+            throw ServerException(message, problemDetails: problem);
+          }
+          throw ApiException(
+            message,
+            statusCode: response.statusCode,
+            problemDetails: problem,
+          );
+      }
+    }
+  }
+}
