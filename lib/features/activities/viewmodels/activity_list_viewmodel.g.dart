@@ -55,7 +55,7 @@ final class ActivityListViewModelProvider
 }
 
 String _$activityListViewModelHash() =>
-    r'fe59e37e256ab0a869d468a337f7d558e2a88982';
+    r'6a0ac5965d54634397f1751581b02745e1874d76';
 
 final class ActivityListViewModelFamily extends $Family
     with

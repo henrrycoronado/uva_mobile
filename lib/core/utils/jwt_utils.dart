@@ -54,4 +54,13 @@ class JwtUtils {
       return [];
     }
   }
+
+  static String? getUserIdFromToken(String token) {
+    try {
+      final payload = parseJwt(token);
+      return payload['sub']?.toString();
+    } catch (e) {
+      return null;
+    }
+  }
 }

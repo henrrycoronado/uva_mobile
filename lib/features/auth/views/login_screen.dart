@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/network/models/api_exceptions.dart';
+import '../../../core/providers/user_roles_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../core/widgets/auth/login_form.dart';
@@ -37,6 +38,8 @@ class LoginScreen extends ConsumerWidget {
           context.showSnackBar(errorMessage, isError: true);
         },
         data: (_) {
+          ref.invalidate(userRolesProvider);
+          ref.invalidate(isSuperUserOrAdminProvider);
           context.go(AppRoutes.home);
         },
       );

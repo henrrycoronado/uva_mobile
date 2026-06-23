@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/activities/views/activity_details_screen.dart';
 import '../../features/activities/views/create_activity_screen.dart';
 import '../../features/activities/views/program_activities_screen.dart';
 import '../../features/auth/views/login_screen.dart';
@@ -79,6 +80,13 @@ final appRouterProvider = Provider<GoRouter>((ref) {
         builder: (context, state) {
           final id = state.pathParameters['id']!;
           return CreateActivityScreen(programCode: id);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.activityDetails,
+        builder: (context, state) {
+          final id = state.pathParameters['id']!;
+          return ActivityDetailsScreen(activityCode: id);
         },
       ),
       StatefulShellRoute.indexedStack(

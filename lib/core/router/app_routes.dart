@@ -8,5 +8,6 @@ class AppRoutes {
   static const String editProgram = '/programs/:id/edit';
   static const String programActivities = '/programs/:id/activities';
   static const String createProgramActivity = '/programs/:id/activities/create';
+  static const String activityDetails = '/activities/:id';
   static const String profile = '/profile';
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../core/providers/user_roles_provider.dart';
 import '../../../core/theme/app_colors.dart';
@@ -31,15 +32,15 @@ class ProgramDetailsScreen extends ConsumerWidget {
       initialData: programExtra,
       future: futureProgram,
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting && !snapshot.hasData) {
+        if (snapshot.hasData) {
+          final program = snapshot.data!;
+          return _buildContent(context, ref, program, canEdit);
+        }
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         if (snapshot.hasError) {
           return Scaffold(body: Center(child: Text('Error: ${snapshot.error}')));
-        }
-        if (snapshot.hasData) {
-          final program = snapshot.data!;
-          return _buildContent(context, ref, program, canEdit);
         }
         return const Scaffold(body: Center(child: Text('No se encontró el programa')));
       },
@@ -50,11 +51,22 @@ class ProgramDetailsScreen extends ConsumerWidget {
     // Scaffold extrañado aquí para poder sobreescribir el AppBar con los datos correctos
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalle de Programa'),
+        title: const Text('Detalle del Programa'),
+        backgroundColor: AppColors.primary,
+        elevation: 1,
         actions: [
+          IconButton(
+            icon: const Icon(Icons.share),
+            tooltip: 'Compartir Programa',
+            onPressed: () {
+              final String programName = program.name;
+              final String shareText = '¡Mira $programName en UvoluntApp!\n\nhttps://uvoluntapp.hc-server.xyz/programs/${program.uvaCode}';
+              SharePlus.instance.share(ShareParams(text: shareText));
+            },
+          ),
           if (canEdit)
             IconButton(
-              icon: const Icon(Icons.edit, color: AppColors.primary),
+              icon: const Icon(Icons.edit, color: Colors.white),
               onPressed: () {
                 context.push('/programs/${program.uvaCode}/edit', extra: program);
               },
@@ -123,7 +135,12 @@ class ProgramDetailsScreen extends ConsumerWidget {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  ...previewList.map((a) => ActivityCardWidget(activity: a)),
+                  ...previewList.map((a) => ActivityCardWidget(
+                    activity: a,
+                    onTap: () {
+                      context.push('/activities/${a.uvaCode}');
+                    },
+                  )),
                   if (activities.length > 3)
                     OutlinedButton(
                       onPressed: () {

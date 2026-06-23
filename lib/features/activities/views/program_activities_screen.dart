@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/activities/activity_card_widget.dart';
@@ -42,7 +43,13 @@ class ProgramActivitiesScreen extends ConsumerWidget {
               padding: const EdgeInsets.all(16.0),
               itemCount: activities.length,
               itemBuilder: (context, index) {
-                return ActivityCardWidget(activity: activities[index]);
+                final activity = activities[index];
+                return ActivityCardWidget(
+                  activity: activity,
+                  onTap: () {
+                    context.push('/activities/${activity.uvaCode}');
+                  },
+                );
               },
             ),
           );

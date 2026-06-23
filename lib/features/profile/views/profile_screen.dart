@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/network/exceptions/offline_no_profile_exception.dart';
 import '../../../core/providers/secure_storage_provider.dart';
+import '../../../core/providers/user_roles_provider.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/locale_provider.dart';
@@ -143,6 +144,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       } catch (_) {}
                       await storage.deleteToken();
                       await storage.deleteRefreshToken();
+                      ref.invalidate(userRolesProvider);
+                      ref.invalidate(isSuperUserOrAdminProvider);
                       if (context.mounted) {
                         context.go(AppRoutes.login);
                       }
