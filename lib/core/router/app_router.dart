@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/auth/views/login_screen.dart';
+import '../../features/auth/views/register_screen.dart';
 import '../../features/home/views/home_screen.dart';
 import '../providers/secure_storage_provider.dart';
 import 'app_routes.dart';
@@ -16,8 +17,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       final isLoggedIn = token != null && token.isNotEmpty;
 
       final isLoginRoute = state.matchedLocation == AppRoutes.login;
+      final isRegisterRoute = state.matchedLocation == AppRoutes.register;
+      final isAuthRoute = isLoginRoute || isRegisterRoute;
 
-      if (isLoginRoute) {
+      if (isAuthRoute) {
         return isLoggedIn ? AppRoutes.home : null;
       }
 
@@ -37,6 +40,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.login,
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.register,
+        builder: (context, state) => const RegisterScreen(),
       ),
       GoRoute(
         path: AppRoutes.home,

@@ -70,5 +70,12 @@
             }
         }
     },
-    "goToSettings": "Ir a Configuración"
+    "goToSettings": "Ir a Configuración",
+    "register": "Registrarse",
+    "firstNameLabel": "Nombre",
+    "lastNameLabel": "Apellido",
+    "confirmPasswordLabel": "Confirmar Contraseña",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "alreadyHaveAccount": "¿Ya tienes cuenta? Inicia sesión",
+    "dontHaveAccount": "¿No tienes cuenta? Regístrate"
 }

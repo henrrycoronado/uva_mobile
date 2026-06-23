@@ -70,5 +70,12 @@
             }
         }
     },
-    "goToSettings": "Go to Settings"
+    "goToSettings": "Go to Settings",
+    "register": "Register",
+    "firstNameLabel": "First Name",
+    "lastNameLabel": "Last Name",
+    "confirmPasswordLabel": "Confirm Password",
+    "passwordsDoNotMatch": "Passwords do not match",
+    "alreadyHaveAccount": "Already have an account? Login",
+    "dontHaveAccount": "Don't have an account? Register"
 }

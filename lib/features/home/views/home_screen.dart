@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/providers/secure_storage_provider.dart';
 import '../../../core/router/app_routes.dart';
+import '../../../features/auth/repositories/auth_repository.dart';
 import '../../../l10n/app_localizations.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   void _onLogoutPressed(BuildContext context, WidgetRef ref) async {
-    final secureStorage = ref.read(secureStorageProvider);
-    await secureStorage.deleteToken();
+    final repository = ref.read(authRepositoryProvider);
+    await repository.logout();
     if (context.mounted) {
       context.go(AppRoutes.login);
     }

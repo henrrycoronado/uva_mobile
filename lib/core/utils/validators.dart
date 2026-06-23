@@ -40,6 +40,17 @@ class AppValidators {
     return null;
   }
 
+  static String? validateMatch(
+    String? value,
+    String? match,
+    AppLocalizations l10n,
+  ) {
+    if (value != match) {
+      return l10n.passwordsDoNotMatch;
+    }
+    return null;
+  }
+
   static String? validateMinLength(
     String? value,
     AppLocalizations l10n,

@@ -4,42 +4,53 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/router/app_routes.dart';
 import '../../../core/utils/validators.dart';
-import '../../../features/auth/viewmodels/login_view_model.dart';
+import '../../../features/auth/viewmodels/register_view_model.dart';
 import '../../../l10n/app_localizations.dart';
 import '../common/custom_button.dart';
 import '../common/custom_text_field.dart';
 
-class LoginForm extends ConsumerStatefulWidget {
-  const LoginForm({super.key});
+class RegisterForm extends ConsumerStatefulWidget {
+  const RegisterForm({super.key});
 
   @override
-  ConsumerState<LoginForm> createState() => _LoginFormState();
+  ConsumerState<RegisterForm> createState() => _RegisterFormState();
 }
 
-class _LoginFormState extends ConsumerState<LoginForm> {
+class _RegisterFormState extends ConsumerState<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _onLoginPressed() {
+  void _onRegisterPressed() {
     if (_formKey.currentState?.validate() ?? false) {
       ref
-          .read(loginViewModelProvider.notifier)
-          .login(_emailController.text.trim(), _passwordController.text);
+          .read(registerViewModelProvider.notifier)
+          .register(
+            _firstNameController.text.trim(),
+            _lastNameController.text.trim(),
+            _emailController.text.trim(),
+            _passwordController.text,
+          );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final authState = ref.watch(loginViewModelProvider);
+    final authState = ref.watch(registerViewModelProvider);
     final theme = Theme.of(context);
 
     return Padding(
@@ -63,13 +74,37 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                l10n.login,
+                l10n.register,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: theme.colorScheme.onSurface,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(height: 32),
+              CustomTextField(
+                controller: _firstNameController,
+                label: l10n.firstNameLabel,
+                validator: (v) => AppValidators.validateLength(
+                  v,
+                  l10n,
+                  2,
+                  100,
+                  fieldName: l10n.firstNameLabel,
+                ),
+              ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                controller: _lastNameController,
+                label: l10n.lastNameLabel,
+                validator: (v) => AppValidators.validateLength(
+                  v,
+                  l10n,
+                  2,
+                  100,
+                  fieldName: l10n.lastNameLabel,
+                ),
+              ),
+              const SizedBox(height: 16),
               CustomTextField(
                 controller: _emailController,
                 label: l10n.emailLabel,
@@ -82,16 +117,33 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 obscureText: true,
                 validator: (v) => AppValidators.validatePassword(v, l10n),
               ),
+              const SizedBox(height: 16),
+              CustomTextField(
+                controller: _confirmPasswordController,
+                label: l10n.confirmPasswordLabel,
+                obscureText: true,
+                validator: (v) => AppValidators.validateMatch(
+                  v,
+                  _passwordController.text,
+                  l10n,
+                ),
+              ),
               const SizedBox(height: 32),
               CustomButton(
-                text: l10n.login,
+                text: l10n.register,
                 isLoading: authState.isLoading,
-                onPressed: _onLoginPressed,
+                onPressed: _onRegisterPressed,
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => context.go(AppRoutes.register),
-                child: Text(l10n.dontHaveAccount),
+                onPressed: () {
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    context.go(AppRoutes.login);
+                  }
+                },
+                child: Text(l10n.alreadyHaveAccount),
               ),
             ],
           ),
