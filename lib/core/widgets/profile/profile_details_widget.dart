@@ -29,6 +29,7 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
   bool _isEditing = false;
   bool _isLoading = false;
   bool _isUploadingPhoto = false;
+  int _imageVersion = DateTime.now().millisecondsSinceEpoch;
 
   late TextEditingController _firstNameCtrl;
   late TextEditingController _lastNameCtrl;
@@ -116,8 +117,12 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
       );
     } else {
       final finalUrl = photoUrl.startsWith('http') ? photoUrl : '$r2Url/$photoUrl';
+      final versionedUrl = finalUrl.contains('?') 
+          ? '$finalUrl&v=$_imageVersion' 
+          : '$finalUrl?v=$_imageVersion';
+      
       avatarChild = Image.network(
-        finalUrl,
+        versionedUrl,
         fit: BoxFit.cover,
         errorBuilder: (_, _, _) => const Icon(Icons.person, size: 50),
       );
@@ -220,11 +225,15 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
       await ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true);
       await ref.read(profileViewModelProvider.notifier).refresh(forceRefresh: true);
 
-      // Clear Flutter's image cache so it fetches the new photo from the same URL
+      // Clear Flutter's image cache and update version to force UI refresh
       PaintingBinding.instance.imageCache.clear();
       PaintingBinding.instance.imageCache.clearLiveImages();
 
       if (!mounted) return;
+      setState(() {
+        _imageVersion = DateTime.now().millisecondsSinceEpoch;
+      });
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Foto de perfil actualizada correctamente'),

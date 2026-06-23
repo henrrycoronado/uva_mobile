@@ -66,6 +66,20 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.uva_mobile</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>uva</string>
+			</array>
+		</dict>
+	</array>
 	<key>NSLocationWhenInUseUsageDescription</key>
     <string>Necesitamos acceder a tu ubicación para mostrar tu posición exacta en el mapa.</string>
     <key>NSLocationAlwaysUsageDescription</key>
