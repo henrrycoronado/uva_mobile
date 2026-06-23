@@ -80,5 +80,21 @@
     "dontHaveAccount": "¿No tienes cuenta? Regístrate",
     "navPrograms": "Programas",
     "navHome": "Inicio",
-    "navProfile": "Perfil"
+    "navProfile": "Perfil",
+    "homeWelcome": "Hola, {firstName} 👋",
+    "@homeWelcome": {
+        "placeholders": {
+            "firstName": {
+                "type": "String"
+            }
+        }
+    },
+    "homeGoalProgress": "Progreso de tu Meta",
+    "homeActivityStats": "Estadísticas de Actividad",
+    "homeScholarshipProgress": "Progreso de tu Beca",
+    "homeHoursLabel": "Hrs",
+    "homeActivitiesLabel": "Acts",
+    "homeCongratsMsg": "¡Felicidades! Has alcanzado tu meta de horas.",
+    "homeKeepGoingMsg": "¡Sigue así! Estás avanzando muy bien.",
+    "homeStartMsg": "Aún no has registrado horas. ¡Anímate a participar!"
 }

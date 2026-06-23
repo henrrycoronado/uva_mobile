@@ -80,5 +80,21 @@
     "dontHaveAccount": "Don't have an account? Register",
     "navPrograms": "Programs",
     "navHome": "Home",
-    "navProfile": "Profile"
+    "navProfile": "Profile",
+    "homeWelcome": "Hello, {firstName} 👋",
+    "@homeWelcome": {
+        "placeholders": {
+            "firstName": {
+                "type": "String"
+            }
+        }
+    },
+    "homeGoalProgress": "Your Goal Progress",
+    "homeActivityStats": "Activity Stats",
+    "homeScholarshipProgress": "Scholarship Progress",
+    "homeHoursLabel": "Hrs",
+    "homeActivitiesLabel": "Acts",
+    "homeCongratsMsg": "Congratulations! You have reached your hour goal.",
+    "homeKeepGoingMsg": "Keep it up! You are doing great.",
+    "homeStartMsg": "You haven't logged any hours yet. Get started!"
 }

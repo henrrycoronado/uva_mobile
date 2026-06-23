@@ -16,10 +16,7 @@ class ApiClient implements IApiClient {
       _client = client ?? http.Client();
 
   @override
-  Future<Map<String, dynamic>> get(
-    String endpoint, {
-    Map<String, String>? headers,
-  }) async {
+  Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {
     final response = await _client.get(
       Uri.parse('$_baseUrl$endpoint'),
       headers: await _buildHeaders(headers),
@@ -28,7 +25,7 @@ class ApiClient implements IApiClient {
   }
 
   @override
-  Future<Map<String, dynamic>> post(
+  Future<dynamic> post(
     String endpoint, {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
@@ -42,7 +39,7 @@ class ApiClient implements IApiClient {
   }
 
   @override
-  Future<Map<String, dynamic>> put(
+  Future<dynamic> put(
     String endpoint, {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
@@ -56,7 +53,7 @@ class ApiClient implements IApiClient {
   }
 
   @override
-  Future<Map<String, dynamic>> patch(
+  Future<dynamic> patch(
     String endpoint, {
     Map<String, dynamic>? body,
     Map<String, String>? headers,
