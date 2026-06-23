@@ -9,5 +9,66 @@
     "emailLabel": "Email Address",
     "passwordLabel": "Password",
     "settings": "Settings",
-    "language": "Language"
+    "language": "Language",
+    "welcomeMessage": "Welcome to U-VoluntApp!",
+    "genericError": "An error has occurred",
+    "invalidResponse": "Invalid response",
+    "httpError": "HTTP Error {statusCode}",
+    "@httpError": {
+        "placeholders": {
+            "statusCode": {
+                "type": "int"
+            }
+        }
+    },
+    "fieldRequired": "{fieldName} is required",
+    "@fieldRequired": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            }
+        }
+    },
+    "emailRequired": "Email is required",
+    "invalidEmail": "Enter a valid email",
+    "passwordRequired": "Password is required",
+    "passwordMinLength": "Password must have at least 8 characters",
+    "passwordFormat": "Must contain at least 1 uppercase letter and 1 number",
+    "minLength": "{fieldName} must have at least {min} characters",
+    "@minLength": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            },
+            "min": {
+                "type": "int"
+            }
+        }
+    },
+    "maxLength": "{fieldName} cannot exceed {max} characters",
+    "@maxLength": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "lengthRange": "{fieldName} must have between {min} and {max} characters",
+    "@lengthRange": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            },
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "goToSettings": "Go to Settings"
 }

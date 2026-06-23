@@ -1,11 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/providers/preferences_provider.dart';
+import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
 import 'core/theme/locale_provider.dart';
 import 'core/theme/text_scale_provider.dart';
@@ -14,8 +16,7 @@ import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  // Detectar y configurar el idioma del sistema por defecto para Intl
+  await dotenv.load(fileName: ".env");
   Intl.defaultLocale = Platform.localeName;
 
   final sharedPreferences = await SharedPreferences.getInstance();
@@ -38,16 +39,18 @@ class MainApp extends ConsumerWidget {
     final themeMode = ref.watch(themeProvider);
     final textScale = ref.watch(textScaleProvider);
     final locale = ref.watch(localeProvider);
+    final router = ref.watch(appRouterProvider);
 
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'U-VoluntApp',
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
+      routerConfig: router,
       builder: (context, child) {
         final data = MediaQuery.of(context);
         return MediaQuery(
@@ -55,15 +58,6 @@ class MainApp extends ConsumerWidget {
           child: child!,
         );
       },
-      home: Scaffold(
-        body: Center(
-          child: Builder(
-            builder: (context) {
-              return Text(AppLocalizations.of(context)!.login);
-            },
-          ),
-        ),
-      ),
     );
   }
 }

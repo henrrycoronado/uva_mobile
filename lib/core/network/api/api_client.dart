@@ -114,16 +114,13 @@ class ApiClient implements IApiClient {
         }
       } catch (_) {
         throw ApiException(
-          "respuesta no valida",
+          "invalidResponse",
           statusCode: response.statusCode,
           problemDetails: problem,
         );
       }
 
-      final message =
-          problem?.detail ??
-          problem?.title ??
-          'Error HTTP ${response.statusCode}';
+      final message = problem?.detail ?? problem?.title ?? 'httpError';
 
       switch (response.statusCode) {
         case 400:

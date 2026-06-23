@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_colors.dart';
 
 extension StringExtension on String {
   String capitalize() {
@@ -12,11 +13,39 @@ extension StringExtension on String {
   }
 }
 
+enum SnackBarType { info, success, warning, error }
+
 extension BuildContextExtension on BuildContext {
-  void showSnackBar(String message, {bool isError = false}) {
+  void showSnackBar(
+    String message, {
+    bool isError = false,
+    SnackBarType? type,
+  }) {
+    // Resolve color
+    Color bgColor = AppColors.info;
+
+    if (isError) {
+      bgColor = AppColors.error;
+    } else if (type != null) {
+      switch (type) {
+        case SnackBarType.info:
+          bgColor = AppColors.info;
+          break;
+        case SnackBarType.success:
+          bgColor = AppColors.success;
+          break;
+        case SnackBarType.warning:
+          bgColor = AppColors.warning;
+          break;
+        case SnackBarType.error:
+          bgColor = AppColors.error;
+          break;
+      }
+    }
+
     final snackBar = SnackBar(
       content: Text(message, style: const TextStyle(color: Colors.white)),
-      backgroundColor: isError ? Colors.red.shade700 : Colors.green.shade700,
+      backgroundColor: bgColor,
       behavior: SnackBarBehavior.floating,
       duration: const Duration(seconds: 3),
     );

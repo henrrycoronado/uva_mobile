@@ -15,11 +15,10 @@ class LocaleNotifier extends Notifier<Locale> {
       return Locale(savedLocale);
     }
 
-    // Si no hay idioma guardado, intentar leer el sistema
     final systemLocale = Platform.localeName.split('_').first;
     if (systemLocale == 'en') return const Locale('en');
 
-    return const Locale('es'); // Default
+    return const Locale('es');
   }
 
   Future<void> changeLocale(String languageCode) async {

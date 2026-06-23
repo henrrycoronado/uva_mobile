@@ -17,4 +17,10 @@ class AppColors {
   static const Color lightTertiary = Color(0xFF71717A);
   static const Color lightNeutral = Color(0xFFF9F9F9);
   static const Color lightText = Color(0xFF121214);
+
+  // Semantic / Accent Colors
+  static const Color error = Color(0xFFE53935);
+  static const Color warning = Color(0xFFFBC02D);
+  static const Color success = Color(0xFF43A047);
+  static const Color info = Color(0xFF29B6F6);
 }

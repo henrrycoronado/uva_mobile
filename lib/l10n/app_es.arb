@@ -9,5 +9,66 @@
     "emailLabel": "Correo Electrónico",
     "passwordLabel": "Contraseña",
     "settings": "Configuraciones",
-    "language": "Idioma"
+    "language": "Idioma",
+    "welcomeMessage": "¡Bienvenido a U-VoluntApp!",
+    "genericError": "Ha ocurrido un error",
+    "invalidResponse": "Respuesta no válida",
+    "httpError": "Error HTTP {statusCode}",
+    "@httpError": {
+        "placeholders": {
+            "statusCode": {
+                "type": "int"
+            }
+        }
+    },
+    "fieldRequired": "{fieldName} es requerido",
+    "@fieldRequired": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            }
+        }
+    },
+    "emailRequired": "El correo es requerido",
+    "invalidEmail": "Ingresa un correo electrónico válido",
+    "passwordRequired": "La contraseña es requerida",
+    "passwordMinLength": "La contraseña debe tener mínimo 8 caracteres",
+    "passwordFormat": "Debe tener al menos 1 mayúscula y 1 número",
+    "minLength": "{fieldName} debe tener al menos {min} caracteres",
+    "@minLength": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            },
+            "min": {
+                "type": "int"
+            }
+        }
+    },
+    "maxLength": "{fieldName} no puede exceder {max} caracteres",
+    "@maxLength": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "lengthRange": "{fieldName} debe tener entre {min} y {max} caracteres",
+    "@lengthRange": {
+        "placeholders": {
+            "fieldName": {
+                "type": "String"
+            },
+            "min": {
+                "type": "int"
+            },
+            "max": {
+                "type": "int"
+            }
+        }
+    },
+    "goToSettings": "Ir a Configuración"
 }

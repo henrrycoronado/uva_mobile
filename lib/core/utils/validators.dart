@@ -1,75 +1,79 @@
+import '../../../l10n/app_localizations.dart';
 import 'constants.dart';
 
 class AppValidators {
   AppValidators._();
 
   static String? validateRequired(
-    String? value, {
-    String fieldName = 'Este campo',
+    String? value,
+    AppLocalizations l10n, {
+    String fieldName = '',
   }) {
     if (value == null || value.trim().isEmpty) {
-      return '$fieldName es requerido';
+      return l10n.fieldRequired(fieldName);
     }
     return null;
   }
 
-  static String? validateEmail(String? value) {
+  static String? validateEmail(String? value, AppLocalizations l10n) {
     if (value == null || value.trim().isEmpty) {
-      return 'El correo es requerido';
+      return l10n.emailRequired;
     }
     final regex = RegExp(AppConstants.emailRegex);
     if (!regex.hasMatch(value)) {
-      return 'Ingresa un correo electrónico válido';
+      return l10n.invalidEmail;
     }
     return null;
   }
 
-  static String? validatePassword(String? value) {
+  static String? validatePassword(String? value, AppLocalizations l10n) {
     if (value == null || value.trim().isEmpty) {
-      return 'La contraseña es requerida';
+      return l10n.passwordRequired;
     }
-    // El backend pide min 8. Nosotros exigimos además seguridad estándar
     if (value.length < 8) {
-      return 'La contraseña debe tener mínimo 8 caracteres';
+      return l10n.passwordMinLength;
     }
     final regex = RegExp(AppConstants.passwordRegex);
     if (!regex.hasMatch(value)) {
-      return 'Debe tener al menos 1 mayúscula y 1 número';
+      return l10n.passwordFormat;
     }
     return null;
   }
 
   static String? validateMinLength(
     String? value,
+    AppLocalizations l10n,
     int min, {
-    String fieldName = 'Este campo',
+    String fieldName = '',
   }) {
     if (value == null || value.trim().length < min) {
-      return '$fieldName debe tener al menos $min caracteres';
+      return l10n.minLength(fieldName, min);
     }
     return null;
   }
 
   static String? validateMaxLength(
     String? value,
+    AppLocalizations l10n,
     int max, {
-    String fieldName = 'Este campo',
+    String fieldName = '',
   }) {
     if (value != null && value.trim().length > max) {
-      return '$fieldName no puede exceder $max caracteres';
+      return l10n.maxLength(fieldName, max);
     }
     return null;
   }
 
   static String? validateLength(
     String? value,
+    AppLocalizations l10n,
     int min,
     int max, {
-    String fieldName = 'Este campo',
+    String fieldName = '',
   }) {
     final length = value?.trim().length ?? 0;
     if (length < min || length > max) {
-      return '$fieldName debe tener entre $min y $max caracteres';
+      return l10n.lengthRange(fieldName, min, max);
     }
     return null;
   }

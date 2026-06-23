@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../providers/permission_provider.dart';
 
 class PermissionDialog extends ConsumerWidget {
@@ -55,7 +56,7 @@ class PermissionDialog extends ConsumerWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(AppLocalizations.of(context)!.cancel),
         ),
         ElevatedButton(
           onPressed: () async {
@@ -65,7 +66,7 @@ class PermissionDialog extends ConsumerWidget {
               Navigator.of(context).pop();
             }
           },
-          child: const Text('Ir a Configuración'),
+          child: Text(AppLocalizations.of(context)!.goToSettings),
         ),
       ],
     );
