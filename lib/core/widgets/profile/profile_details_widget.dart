@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../features/catalogs/models/catalog_groups.dart';
-import '../../../../features/catalogs/viewmodels/catalogs_view_model.dart';
+import '../../../../features/catalogs/models/catalog_item_dto.dart';
 import '../../../../features/catalogs/views/catalog_selector_widget.dart';
 import '../../../../features/home/models/profile_response_dto.dart';
-import '../../../../features/home/viewmodels/home_view_model.dart';
 import '../../../../features/profile/models/update_profile_dto.dart';
-import '../../../../features/profile/repositories/profile_repository.dart';
-import '../../../../features/profile/viewmodels/profile_view_model.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
 
-class ProfileDetailsWidget extends ConsumerStatefulWidget {
+class ProfileDetailsWidget extends StatefulWidget {
   final ProfileResponseDto profile;
+  final List<CatalogItemDto> careerOptions;
+  final bool isCatalogsLoading;
+  final Future<void> Function(UpdateProfileDto) onSave;
+  final Future<void> Function(String filePath) onPhotoUpload;
+  final int imageVersion;
 
-  const ProfileDetailsWidget({super.key, required this.profile});
+  const ProfileDetailsWidget({
+    super.key,
+    required this.profile,
+    required this.careerOptions,
+    required this.onSave,
+    required this.onPhotoUpload,
+    this.isCatalogsLoading = false,
+    this.imageVersion = 0,
+  });
 
   @override
-  ConsumerState<ProfileDetailsWidget> createState() =>
-      _ProfileDetailsWidgetState();
+  State<ProfileDetailsWidget> createState() => _ProfileDetailsWidgetState();
 }
 
-class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
+class _ProfileDetailsWidgetState extends State<ProfileDetailsWidget> {
   bool _isEditing = false;
   bool _isLoading = false;
   bool _isUploadingPhoto = false;
-  int _imageVersion = DateTime.now().millisecondsSinceEpoch;
 
   late TextEditingController _firstNameCtrl;
   late TextEditingController _lastNameCtrl;
@@ -87,14 +93,11 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
         personalGoalHours: double.tryParse(_goalCtrl.text.trim()),
       );
 
-      final repo = ref.read(profileRepositoryProvider);
-      await repo.updateProfile(dto);
+      await widget.onSave(dto);
 
-      // Refresh global state
-      await ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true);
-      await ref.read(profileViewModelProvider.notifier).refresh(forceRefresh: true);
-
-      setState(() => _isEditing = false);
+      if (mounted) {
+        setState(() => _isEditing = false);
+      }
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(
@@ -118,8 +121,8 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
     } else {
       final finalUrl = photoUrl.startsWith('http') ? photoUrl : '$r2Url/$photoUrl';
       final versionedUrl = finalUrl.contains('?') 
-          ? '$finalUrl&v=$_imageVersion' 
-          : '$finalUrl?v=$_imageVersion';
+          ? '$finalUrl&v=${widget.imageVersion}' 
+          : '$finalUrl?v=${widget.imageVersion}';
       
       avatarChild = Image.network(
         versionedUrl,
@@ -209,31 +212,18 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
     try {
       final XFile? photo = await picker.pickImage(
         source: source,
-        imageQuality: 70, // Compresses the image to save bandwidth
+        imageQuality: 70,
         maxWidth: 1024,
         maxHeight: 1024,
       );
 
-      if (photo == null) return; // User canceled
+      if (photo == null) return;
 
       setState(() => _isUploadingPhoto = true);
 
-      final repo = ref.read(profileRepositoryProvider);
-      await repo.updateProfilePhoto(photo.path);
-
-      // Refresh global state to get new URL
-      await ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true);
-      await ref.read(profileViewModelProvider.notifier).refresh(forceRefresh: true);
-
-      // Clear Flutter's image cache and update version to force UI refresh
-      PaintingBinding.instance.imageCache.clear();
-      PaintingBinding.instance.imageCache.clearLiveImages();
+      await widget.onPhotoUpload(photo.path);
 
       if (!mounted) return;
-      setState(() {
-        _imageVersion = DateTime.now().millisecondsSinceEpoch;
-      });
-
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Foto de perfil actualizada correctamente'),
@@ -255,13 +245,18 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
-    ref.watch(catalogsViewModelProvider);
 
-    final careerDisplay =
-        widget.profile.careerName ??
-        ref
-            .read(catalogsViewModelProvider.notifier)
-            .getTypeName(CatalogTypeGroup.career, widget.profile.careerCode);
+    // Determine career display name using passed options
+    String careerDisplay = widget.profile.careerName ?? '';
+    if (careerDisplay.isEmpty && widget.profile.careerCode != null) {
+      try {
+        careerDisplay = widget.careerOptions
+            .firstWhere((e) => e.code == widget.profile.careerCode)
+            .name;
+      } catch (_) {
+        careerDisplay = widget.profile.careerCode!;
+      }
+    }
 
     return Card(
       elevation: 0,
@@ -338,7 +333,8 @@ class _ProfileDetailsWidgetState extends ConsumerState<ProfileDetailsWidget> {
             ] else ...[
               CatalogSelectorWidget(
                 label: 'Career',
-                groupName: CatalogTypeGroup.career,
+                items: widget.careerOptions,
+                isLoading: widget.isCatalogsLoading,
                 currentCode: _selectedCareerCode,
                 currentName: widget.profile.careerName,
                 onChanged: (item) {

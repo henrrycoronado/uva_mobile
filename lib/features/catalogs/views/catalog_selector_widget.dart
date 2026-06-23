@@ -1,49 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/catalog_item_dto.dart';
-import '../viewmodels/catalogs_view_model.dart';
 
-class CatalogSelectorWidget extends ConsumerStatefulWidget {
+class CatalogSelectorWidget extends StatelessWidget {
   final String label;
-  final String groupName;
-  final bool isState;
   final String? currentCode;
   final String? currentName;
+  final List<CatalogItemDto> items;
+  final bool isLoading;
   final void Function(CatalogItemDto) onChanged;
 
   const CatalogSelectorWidget({
     super.key,
     required this.label,
-    required this.groupName,
-    this.isState = false,
     this.currentCode,
     this.currentName,
+    required this.items,
+    this.isLoading = false,
     required this.onChanged,
   });
 
-  @override
-  ConsumerState<CatalogSelectorWidget> createState() =>
-      _CatalogSelectorWidgetState();
-}
-
-class _CatalogSelectorWidgetState extends ConsumerState<CatalogSelectorWidget> {
-  @override
-  void initState() {
-    super.initState();
-    // Fetch data asynchronously when widget is mounted
-    Future.microtask(() {
-      if (!mounted) return;
-      final vm = ref.read(catalogsViewModelProvider.notifier);
-      if (widget.isState) {
-        vm.fetchStateCatalog(widget.groupName);
-      } else {
-        vm.fetchTypeCatalog(widget.groupName);
-      }
-    });
-  }
-
-  void _showPicker(BuildContext context, List<CatalogItemDto> items) {
+  void _showPicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -57,7 +34,7 @@ class _CatalogSelectorWidgetState extends ConsumerState<CatalogSelectorWidget> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(
-                  widget.label,
+                  label,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -76,7 +53,7 @@ class _CatalogSelectorWidgetState extends ConsumerState<CatalogSelectorWidget> {
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final item = items[index];
-                      final isSelected = item.code == widget.currentCode;
+                      final isSelected = item.code == currentCode;
                       return ListTile(
                         title: Text(item.name),
                         trailing: isSelected
@@ -84,7 +61,7 @@ class _CatalogSelectorWidgetState extends ConsumerState<CatalogSelectorWidget> {
                             : null,
                         onTap: () {
                           Navigator.of(context).pop();
-                          widget.onChanged(item);
+                          onChanged(item);
                         },
                       );
                     },
@@ -99,33 +76,35 @@ class _CatalogSelectorWidgetState extends ConsumerState<CatalogSelectorWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(catalogsViewModelProvider);
-    final vm = ref.read(catalogsViewModelProvider.notifier);
-
-    final items = widget.isState
-        ? state.cachedStates[widget.groupName] ?? []
-        : state.cachedTypes[widget.groupName] ?? [];
-
-    final displayName = widget.isState
-        ? vm.getStateName(widget.groupName, widget.currentCode)
-        : vm.getTypeName(widget.groupName, widget.currentCode);
-
-    String displayValue = displayName;
-    if (displayValue == widget.currentCode && widget.currentName != null && widget.currentName!.isNotEmpty) {
-      displayValue = widget.currentName!;
-    } else if (displayValue.isEmpty) {
-      displayValue = 'Seleccionar...';
+    // Determine display name locally from the provided items
+    String displayValue = 'Seleccionar...';
+    
+    if (currentCode != null) {
+      try {
+        final match = items.firstWhere((item) => item.code == currentCode);
+        displayValue = match.name;
+      } catch (_) {
+        if (currentName != null && currentName!.isNotEmpty) {
+          displayValue = currentName!;
+        } else {
+          displayValue = currentCode!; // Fallback
+        }
+      }
+    } else if (currentName != null && currentName!.isNotEmpty) {
+      displayValue = currentName!;
     }
+
+    final bool isPlaceholder = displayValue == 'Seleccionar...';
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: InkWell(
-        onTap: () => _showPicker(context, items),
+        onTap: () => _showPicker(context),
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: widget.label,
+            labelText: label,
             isDense: true,
-            suffixIcon: state.isLoading && items.isEmpty
+            suffixIcon: isLoading && items.isEmpty
                 ? Transform.scale(
                     scale: 0.5,
                     child: const CircularProgressIndicator(strokeWidth: 2),
@@ -134,7 +113,7 @@ class _CatalogSelectorWidgetState extends ConsumerState<CatalogSelectorWidget> {
           ),
           child: Text(
             displayValue,
-            style: TextStyle(color: displayName.isEmpty ? Colors.grey : null),
+            style: TextStyle(color: isPlaceholder ? Colors.grey : null),
           ),
         ),
       ),
