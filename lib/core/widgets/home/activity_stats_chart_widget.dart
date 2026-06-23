@@ -79,7 +79,9 @@ class ActivityStatsChartWidget extends StatelessWidget {
                   drawVerticalLine: false,
                   getDrawingHorizontalLine: (value) {
                     return FlLine(
-                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                      color: theme.colorScheme.outlineVariant.withValues(
+                        alpha: 0.5,
+                      ),
                       strokeWidth: 1,
                       dashArray: [5, 5],
                     );

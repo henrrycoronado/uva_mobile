@@ -80,7 +80,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                 controller: _passwordController,
                 label: l10n.passwordLabel,
                 obscureText: true,
-                validator: (v) => AppValidators.validatePassword(v, l10n),
               ),
               const SizedBox(height: 32),
               CustomButton(

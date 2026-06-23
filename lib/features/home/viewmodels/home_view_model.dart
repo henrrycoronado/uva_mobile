@@ -12,13 +12,13 @@ class HomeViewModel extends _$HomeViewModel {
     return _fetchDashboardData();
   }
 
-  Future<HomeState> _fetchDashboardData() async {
+  Future<HomeState> _fetchDashboardData({bool forceRefresh = false}) async {
     final repository = ref.read(homeRepositoryProvider);
 
     final results = await Future.wait([
-      repository.getMe(),
-      repository.getMyVolunteerHistory(),
-      repository.getMyScholarships(),
+      repository.getMe(forceRefresh: forceRefresh),
+      repository.getMyVolunteerHistory(forceRefresh: forceRefresh),
+      repository.getMyScholarships(forceRefresh: forceRefresh),
     ]);
 
     return HomeState(
@@ -28,8 +28,10 @@ class HomeViewModel extends _$HomeViewModel {
     );
   }
 
-  Future<void> refresh() async {
-    state = const AsyncValue.loading();
-    state = await AsyncValue.guard(() => _fetchDashboardData());
+  Future<void> refresh({bool forceRefresh = false}) async {
+    if (forceRefresh) {
+      state = const AsyncValue.loading();
+    }
+    state = await AsyncValue.guard(() => _fetchDashboardData(forceRefresh: forceRefresh));
   }
 }

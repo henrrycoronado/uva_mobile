@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:path/path.dart' as p;
 
 import '../../local_storage/secure/i_secure_storage.dart';
 import '../models/api_exceptions.dart';
@@ -73,6 +75,46 @@ class ApiClient implements IApiClient {
       headers: await _buildHeaders(headers),
     );
     _handleResponse(response, isDelete: true);
+  }
+
+  @override
+  Future<dynamic> patchMultipart(
+    String endpoint, {
+    required String filePath,
+    required String fileFieldName,
+    Map<String, String>? headers,
+  }) async {
+    final request = http.MultipartRequest(
+      'PATCH',
+      Uri.parse('$_baseUrl$endpoint'),
+    );
+
+    // Apply custom headers and auth
+    final baseHeaders = await _buildHeaders(headers);
+    // Remove content-type to let multipart handle it
+    baseHeaders.remove('Content-Type');
+    request.headers.addAll(baseHeaders);
+
+    final ext = p.extension(filePath).toLowerCase();
+    MediaType? contentType;
+    if (ext == '.jpg' || ext == '.jpeg') {
+      contentType = MediaType('image', 'jpeg');
+    } else if (ext == '.png') {
+      contentType = MediaType('image', 'png');
+    }
+
+    // Attach file
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        fileFieldName,
+        filePath,
+        contentType: contentType,
+      ),
+    );
+
+    final streamedResponse = await _client.send(request);
+    final response = await http.Response.fromStream(streamedResponse);
+    return _handleResponse(response);
   }
 
   Future<Map<String, String>> _buildHeaders(

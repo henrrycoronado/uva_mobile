@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'core/local_storage/hive/cache_service.dart';
 
 import 'core/providers/preferences_provider.dart';
 import 'core/router/app_router.dart';
@@ -19,12 +22,17 @@ void main() async {
   await dotenv.load(fileName: ".env");
   Intl.defaultLocale = Platform.localeName;
 
+  await Hive.initFlutter();
+  final cacheService = CacheService();
+  await cacheService.init();
+
   final sharedPreferences = await SharedPreferences.getInstance();
 
   runApp(
     ProviderScope(
       overrides: [
         sharedPreferencesProvider.overrideWithValue(sharedPreferences),
+        cacheServiceProvider.overrideWithValue(cacheService),
       ],
       child: const MainApp(),
     ),

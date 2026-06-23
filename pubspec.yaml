@@ -23,14 +23,18 @@ dependencies:
   hive_ce: ^2.19.3
   hive_ce_flutter: ^2.3.4
   http: ^1.6.0
+  http_parser: ^4.1.2
   image_picker: ^1.2.2
   intl: ^0.20.2
   latlong2: ^0.9.1
   mobile_scanner: ^7.2.0
+  path: ^1.9.1
+  path_provider: ^2.1.6
   permission_handler: ^12.0.3
   riverpod_annotation: ^4.0.2
   shared_preferences: ^2.5.5
   syncfusion_flutter_pdfviewer: ^33.2.13+1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

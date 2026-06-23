@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/local_storage/hive/cache_service.dart';
 import '../../../core/local_storage/secure/i_secure_storage.dart';
 import '../../../core/network/api/i_api_client.dart';
 import '../../../core/providers/api_client_provider.dart';
@@ -11,14 +12,16 @@ import 'i_auth_repository.dart';
 final authRepositoryProvider = Provider<IAuthRepository>((ref) {
   final apiClient = ref.watch(apiClientProvider);
   final secureStorage = ref.watch(secureStorageProvider);
-  return AuthRepository(apiClient, secureStorage);
+  final cacheService = ref.watch(cacheServiceProvider);
+  return AuthRepository(apiClient, secureStorage, cacheService);
 });
 
 class AuthRepository implements IAuthRepository {
   final IApiClient _apiClient;
   final ISecureStorage _secureStorage;
+  final CacheService _cacheService;
 
-  AuthRepository(this._apiClient, this._secureStorage);
+  AuthRepository(this._apiClient, this._secureStorage, this._cacheService);
 
   @override
   Future<AuthResponseDto> register(RegisterRequestDto request) async {
@@ -53,6 +56,7 @@ class AuthRepository implements IAuthRepository {
         // Fallback: Si falla (por ejemplo, red), de todas formas borramos
       }
     }
+    await _cacheService.clearAll();
     await _secureStorage.clearAll();
   }
 

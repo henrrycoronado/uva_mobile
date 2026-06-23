@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../core/network/exceptions/offline_no_profile_exception.dart';
+import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/home/activity_stats_chart_widget.dart';
 import '../../../core/widgets/home/goal_progress_chart_widget.dart';
 import '../../../core/widgets/home/home_header_widget.dart';
 import '../../../core/widgets/home/scholarship_progress_card_widget.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../auth/repositories/auth_repository.dart';
 import '../viewmodels/home_view_model.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -39,7 +43,7 @@ class HomeScreen extends ConsumerWidget {
           final isZero = state.history.validatedHours == 0;
 
           return RefreshIndicator(
-            onRefresh: () => ref.read(homeViewModelProvider.notifier).refresh(),
+            onRefresh: () => ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16.0),
@@ -74,21 +78,41 @@ class HomeScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error, color: Colors.red, size: 50),
-              const SizedBox(height: 10),
-              Text(err.toString(), textAlign: TextAlign.center),
-              TextButton(
-                onPressed: () =>
-                    ref.read(homeViewModelProvider.notifier).refresh(),
-                child: const Text('Reintentar'),
+        error: (err, stack) {
+          if (err is OfflineNoProfileException) {
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              final repo = ref.read(authRepositoryProvider);
+              await repo.logout();
+              if (context.mounted) context.go(AppRoutes.login);
+            });
+            return const Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 16),
+                  Text('Cerrando sesión por seguridad...'),
+                ],
               ),
-            ],
-          ),
-        ),
+            );
+          }
+
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error, color: Colors.red, size: 50),
+                const SizedBox(height: 10),
+                Text(err.toString(), textAlign: TextAlign.center),
+                TextButton(
+                  onPressed: () =>
+                      ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true),
+                  child: const Text('Reintentar'),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }

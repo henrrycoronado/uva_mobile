@@ -96,5 +96,41 @@
     "homeActivitiesLabel": "Acts",
     "homeCongratsMsg": "¡Felicidades! Has alcanzado tu meta de horas.",
     "homeKeepGoingMsg": "¡Sigue así! Estás avanzando muy bien.",
-    "homeStartMsg": "Aún no has registrado horas. ¡Anímate a participar!"
+    "homeStartMsg": "Aún no has registrado horas. ¡Anímate a participar!",
+    
+    "profileEdit": "Editar Perfil",
+    "profileCancel": "Cancelar",
+    "profileSave": "Guardar",
+    "profileChangePhoto": "Cambiar Foto",
+    "profileEnrolments": "Inscripciones",
+    "profileTrackings": "Seguimientos",
+    "profileScholarships": "Becas",
+    "profileReports": "Reportes",
+    
+    "settingsTitle": "Configuración",
+    "settingsLanguage": "Idioma",
+    "settingsLanguageEs": "Español",
+    "settingsLanguageEn": "Inglés",
+    "settingsLanguageSystem": "Sistema",
+    "settingsTheme": "Tema",
+    "settingsThemeLight": "Claro",
+    "settingsThemeDark": "Oscuro",
+    "settingsThemeSystem": "Sistema",
+    "settingsFontSize": "Tamaño de Fuente",
+    "settingsFontSmall": "Pequeño",
+    "settingsFontNormal": "Normal",
+    "settingsFontBig": "Grande",
+    "settingsPermissions": "Permisos del Dispositivo",
+    "settingsPermissionCamera": "Cámara",
+    "settingsPermissionLocation": "Ubicación",
+    "settingsPermissionNotifications": "Notificaciones",
+    "settingsPermissionGranted": "Permitido",
+    "settingsPermissionDenied": "Denegado",
+
+    "supportTitle": "Ayuda y Contacto",
+    "supportEmail": "soporte@uvoluntapp.com",
+    "supportPhone": "+591 12345678",
+    "supportPdfView": "Ver mi PDF",
+    
+    "logout": "Cerrar Sesión"
 }

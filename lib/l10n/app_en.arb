@@ -96,5 +96,41 @@
     "homeActivitiesLabel": "Acts",
     "homeCongratsMsg": "Congratulations! You have reached your hour goal.",
     "homeKeepGoingMsg": "Keep it up! You are doing great.",
-    "homeStartMsg": "You haven't logged any hours yet. Get started!"
+    "homeStartMsg": "You haven't logged any hours yet. Get started!",
+    
+    "profileEdit": "Edit Profile",
+    "profileCancel": "Cancel",
+    "profileSave": "Save",
+    "profileChangePhoto": "Change Photo",
+    "profileEnrolments": "Enrolments",
+    "profileTrackings": "Trackings",
+    "profileScholarships": "Scholarships",
+    "profileReports": "Reports",
+    
+    "settingsTitle": "Settings",
+    "settingsLanguage": "Language",
+    "settingsLanguageEs": "Spanish",
+    "settingsLanguageEn": "English",
+    "settingsLanguageSystem": "System",
+    "settingsTheme": "Theme",
+    "settingsThemeLight": "Light",
+    "settingsThemeDark": "Dark",
+    "settingsThemeSystem": "System",
+    "settingsFontSize": "Font Size",
+    "settingsFontSmall": "Small",
+    "settingsFontNormal": "Normal",
+    "settingsFontBig": "Big",
+    "settingsPermissions": "Device Permissions",
+    "settingsPermissionCamera": "Camera",
+    "settingsPermissionLocation": "Location",
+    "settingsPermissionNotifications": "Notifications",
+    "settingsPermissionGranted": "Granted",
+    "settingsPermissionDenied": "Denied",
+
+    "supportTitle": "Help & Contact",
+    "supportEmail": "support@uvoluntapp.com",
+    "supportPhone": "+591 12345678",
+    "supportPdfView": "View my PDF",
+    
+    "logout": "Log Out"
 }
