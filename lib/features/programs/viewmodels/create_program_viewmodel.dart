@@ -12,16 +12,19 @@ class CreateProgramViewModel extends _$CreateProgramViewModel {
   @override
   FutureOr<void> build() {}
 
-  Future<ProgramResponseDto?> createProgram(String name, String? acronym) async {
+  Future<ProgramResponseDto?> createProgram(
+    String name,
+    String? acronym,
+  ) async {
     state = const AsyncLoading();
-    
+
     try {
       final repository = ref.read(programRepositoryProvider);
       final newProgram = await repository.createProgram(name, acronym);
-      
+
       // Refresh the program list to include the newly created program
       ref.read(programListViewModelProvider.notifier).refresh();
-      
+
       state = const AsyncData(null);
       return newProgram;
     } on ApiException catch (e) {

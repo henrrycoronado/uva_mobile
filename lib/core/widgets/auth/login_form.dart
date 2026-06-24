@@ -11,11 +11,7 @@ class LoginForm extends StatefulWidget {
   final bool isLoading;
   final void Function(String email, String password) onLogin;
 
-  const LoginForm({
-    super.key,
-    this.isLoading = false,
-    required this.onLogin,
-  });
+  const LoginForm({super.key, this.isLoading = false, required this.onLogin});
 
   @override
   State<LoginForm> createState() => _LoginFormState();
@@ -35,10 +31,7 @@ class _LoginFormState extends State<LoginForm> {
 
   void _onLoginPressed() {
     if (_formKey.currentState?.validate() ?? false) {
-      widget.onLogin(
-        _emailController.text.trim(),
-        _passwordController.text,
-      );
+      widget.onLogin(_emailController.text.trim(), _passwordController.text);
     }
   }
 
@@ -104,4 +97,3 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 }
-

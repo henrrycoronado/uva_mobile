@@ -12,7 +12,8 @@ class CreateProgramFormWidget extends StatefulWidget {
   });
 
   @override
-  State<CreateProgramFormWidget> createState() => _CreateProgramFormWidgetState();
+  State<CreateProgramFormWidget> createState() =>
+      _CreateProgramFormWidgetState();
 }
 
 class _CreateProgramFormWidgetState extends State<CreateProgramFormWidget> {
@@ -31,7 +32,9 @@ class _CreateProgramFormWidgetState extends State<CreateProgramFormWidget> {
     if (_formKey.currentState!.validate()) {
       widget.onSubmit(
         _nameController.text.trim(),
-        _acronymController.text.trim().isEmpty ? null : _acronymController.text.trim(),
+        _acronymController.text.trim().isEmpty
+            ? null
+            : _acronymController.text.trim(),
       );
     }
   }

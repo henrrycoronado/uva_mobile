@@ -6,11 +6,11 @@ import '../utils/jwt_utils.dart';
 final userRolesProvider = FutureProvider<List<String>>((ref) async {
   final secureStorage = ref.watch(secureStorageProvider);
   final token = await secureStorage.getToken();
-  
+
   if (token == null || token.isEmpty) {
     return [];
   }
-  
+
   return JwtUtils.getRolesFromToken(token);
 });
 

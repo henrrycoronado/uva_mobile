@@ -31,4 +31,3 @@ class EnrollmentListViewModel extends _$EnrollmentListViewModel {
     });
   }
 }
-

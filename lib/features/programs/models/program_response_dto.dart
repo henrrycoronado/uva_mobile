@@ -40,8 +40,8 @@ class ProgramResponseDto {
       managerName: json['managerName'] ?? '',
       state: json['state'] ?? '',
       stateCode: json['stateCode'] ?? '',
-      createdAt: json['createdAt'] != null 
-          ? DateTime.parse(json['createdAt']) 
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
           : DateTime.now(),
     );
   }

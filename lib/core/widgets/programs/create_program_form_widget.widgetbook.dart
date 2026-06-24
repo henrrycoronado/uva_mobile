@@ -3,10 +3,7 @@ import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
 import 'create_program_form_widget.dart';
 
-@widgetbook.UseCase(
-  name: 'Default',
-  type: CreateProgramFormWidget,
-)
+@widgetbook.UseCase(name: 'Default', type: CreateProgramFormWidget)
 Widget buildCreateProgramFormWidgetUseCase(BuildContext context) {
   return Scaffold(
     appBar: AppBar(title: const Text('Crear Programa')),
@@ -22,10 +19,7 @@ Widget buildCreateProgramFormWidgetUseCase(BuildContext context) {
   );
 }
 
-@widgetbook.UseCase(
-  name: 'Loading',
-  type: CreateProgramFormWidget,
-)
+@widgetbook.UseCase(name: 'Loading', type: CreateProgramFormWidget)
 Widget buildCreateProgramFormWidgetLoadingUseCase(BuildContext context) {
   return Scaffold(
     appBar: AppBar(title: const Text('Crear Programa')),

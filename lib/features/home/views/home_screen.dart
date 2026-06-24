@@ -43,7 +43,9 @@ class HomeScreen extends ConsumerWidget {
           final isZero = state.history.validatedHours == 0;
 
           return RefreshIndicator(
-            onRefresh: () => ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true),
+            onRefresh: () => ref
+                .read(homeViewModelProvider.notifier)
+                .refresh(forceRefresh: true),
             child: SingleChildScrollView(
               physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16.0),
@@ -105,8 +107,9 @@ class HomeScreen extends ConsumerWidget {
                 const SizedBox(height: 10),
                 Text(err.toString(), textAlign: TextAlign.center),
                 TextButton(
-                  onPressed: () =>
-                      ref.read(homeViewModelProvider.notifier).refresh(forceRefresh: true),
+                  onPressed: () => ref
+                      .read(homeViewModelProvider.notifier)
+                      .refresh(forceRefresh: true),
                   child: const Text('Reintentar'),
                 ),
               ],

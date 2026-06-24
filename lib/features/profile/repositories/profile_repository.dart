@@ -19,7 +19,8 @@ class ProfileRepository {
     const key = 'profile_me';
     if (!forceRefresh) {
       final cached = await _cache.get(key, maxAge: const Duration(minutes: 5));
-      if (cached != null) return ProfileResponseDto.fromJson(cached as Map<String, dynamic>);
+      if (cached != null)
+        return ProfileResponseDto.fromJson(cached as Map<String, dynamic>);
     }
 
     try {
@@ -28,7 +29,8 @@ class ProfileRepository {
       return ProfileResponseDto.fromJson(response as Map<String, dynamic>);
     } catch (e) {
       final fallback = await _cache.get(key, ignoreExpiration: true);
-      if (fallback != null) return ProfileResponseDto.fromJson(fallback as Map<String, dynamic>);
+      if (fallback != null)
+        return ProfileResponseDto.fromJson(fallback as Map<String, dynamic>);
       throw const OfflineNoProfileException();
     }
   }
@@ -48,5 +50,8 @@ class ProfileRepository {
 
 @riverpod
 ProfileRepository profileRepository(Ref ref) {
-  return ProfileRepository(ref.watch(apiClientProvider), ref.watch(cacheServiceProvider));
+  return ProfileRepository(
+    ref.watch(apiClientProvider),
+    ref.watch(cacheServiceProvider),
+  );
 }

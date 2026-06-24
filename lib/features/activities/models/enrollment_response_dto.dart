@@ -25,8 +25,8 @@ class EnrollmentResponseDto {
       enrolledProfileCode: json['enrolledProfileCode'] ?? '',
       enrolledProfileName: json['enrolledProfileName'] ?? '',
       stateCode: json['stateCode'] ?? '',
-      createdAt: json['createdAt'] != null 
-          ? DateTime.parse(json['createdAt']) 
+      createdAt: json['createdAt'] != null
+          ? DateTime.parse(json['createdAt'])
           : DateTime.now(),
     );
   }

@@ -13,16 +13,20 @@ class CreateActivityViewModel extends _$CreateActivityViewModel {
   @override
   FutureOr<void> build() {}
 
-  Future<ActivityResponseDto?> createActivity(CreateActivitySimpleDto dto) async {
+  Future<ActivityResponseDto?> createActivity(
+    CreateActivitySimpleDto dto,
+  ) async {
     state = const AsyncLoading();
-    
+
     try {
       final repository = ref.read(activityRepositoryProvider);
       final newActivity = await repository.createSimple(dto);
-      
+
       // Refresh the activities list for the program
-      ref.read(activityListViewModelProvider(dto.programCode).notifier).refresh();
-      
+      ref
+          .read(activityListViewModelProvider(dto.programCode).notifier)
+          .refresh();
+
       state = const AsyncData(null);
       return newActivity;
     } on ApiException catch (e) {

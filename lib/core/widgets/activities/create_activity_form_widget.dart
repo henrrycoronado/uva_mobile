@@ -18,14 +18,15 @@ class CreateActivityFormWidget extends StatefulWidget {
   });
 
   @override
-  State<CreateActivityFormWidget> createState() => _CreateActivityFormWidgetState();
+  State<CreateActivityFormWidget> createState() =>
+      _CreateActivityFormWidgetState();
 }
 
 class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
-  
+
   String? _selectedTypeCode;
   DateTime? _startDate;
   DateTime? _endDate;
@@ -43,13 +44,19 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
     if (_formKey.currentState!.validate()) {
       if (_startDate == null || _endDate == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Las fechas de inicio y fin son obligatorias')),
+          const SnackBar(
+            content: Text('Las fechas de inicio y fin son obligatorias'),
+          ),
         );
         return;
       }
       if (_startDate!.isAfter(_endDate!)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('La fecha de inicio no puede ser posterior a la de fin')),
+          const SnackBar(
+            content: Text(
+              'La fecha de inicio no puede ser posterior a la de fin',
+            ),
+          ),
         );
         return;
       }
@@ -58,7 +65,9 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
         programCode: widget.programCode,
         activityTypeCode: _selectedTypeCode!,
         name: _nameController.text.trim(),
-        description: _descriptionController.text.trim().isEmpty ? null : _descriptionController.text.trim(),
+        description: _descriptionController.text.trim().isEmpty
+            ? null
+            : _descriptionController.text.trim(),
         startDate: _startDate!,
         endDate: _endDate!,
         requiresEnrollment: _requiresEnrollment,
@@ -84,7 +93,13 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
       );
       if (time != null) {
         setState(() {
-          final dt = DateTime(picked.year, picked.month, picked.day, time.hour, time.minute);
+          final dt = DateTime(
+            picked.year,
+            picked.month,
+            picked.day,
+            time.hour,
+            time.minute,
+          );
           if (isStart) {
             _startDate = dt;
           } else {
@@ -106,13 +121,16 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
             controller: _nameController,
             decoration: InputDecoration(
               labelText: 'Nombre de la Actividad *',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.event),
             ),
             maxLength: 200,
             enabled: !widget.isLoading,
             validator: (value) {
-              if (value == null || value.trim().isEmpty) return 'El nombre es requerido';
+              if (value == null || value.trim().isEmpty)
+                return 'El nombre es requerido';
               return null;
             },
           ),
@@ -120,7 +138,9 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
           DropdownButtonFormField<String>(
             decoration: InputDecoration(
               labelText: 'Tipo de Actividad *',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.category),
             ),
             initialValue: _selectedTypeCode,
@@ -130,11 +150,13 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                 child: Text(type['value'] as String),
               );
             }).toList(),
-            onChanged: widget.isLoading ? null : (val) {
-              setState(() {
-                _selectedTypeCode = val;
-              });
-            },
+            onChanged: widget.isLoading
+                ? null
+                : (val) {
+                    setState(() {
+                      _selectedTypeCode = val;
+                    });
+                  },
             validator: (value) {
               if (value == null || value.isEmpty) return 'El tipo es requerido';
               return null;
@@ -145,7 +167,9 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
             controller: _descriptionController,
             decoration: InputDecoration(
               labelText: 'Descripción',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.description),
             ),
             maxLines: 3,
@@ -156,10 +180,14 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
             children: [
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: widget.isLoading ? null : () => _selectDate(context, true),
+                  onPressed: widget.isLoading
+                      ? null
+                      : () => _selectDate(context, true),
                   icon: const Icon(Icons.calendar_today, size: 16),
                   label: Text(
-                    _startDate == null ? 'Inicio *' : _startDate.toString().substring(0, 16),
+                    _startDate == null
+                        ? 'Inicio *'
+                        : _startDate.toString().substring(0, 16),
                     style: const TextStyle(fontSize: 12),
                   ),
                 ),
@@ -167,10 +195,14 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
               const SizedBox(width: 8),
               Expanded(
                 child: OutlinedButton.icon(
-                  onPressed: widget.isLoading ? null : () => _selectDate(context, false),
+                  onPressed: widget.isLoading
+                      ? null
+                      : () => _selectDate(context, false),
                   icon: const Icon(Icons.event_available, size: 16),
                   label: Text(
-                    _endDate == null ? 'Fin *' : _endDate.toString().substring(0, 16),
+                    _endDate == null
+                        ? 'Fin *'
+                        : _endDate.toString().substring(0, 16),
                     style: const TextStyle(fontSize: 12),
                   ),
                 ),
@@ -181,21 +213,25 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
           SwitchListTile(
             title: const Text('Requiere Inscripción'),
             value: _requiresEnrollment,
-            onChanged: widget.isLoading ? null : (val) {
-              setState(() {
-                _requiresEnrollment = val;
-              });
-            },
+            onChanged: widget.isLoading
+                ? null
+                : (val) {
+                    setState(() {
+                      _requiresEnrollment = val;
+                    });
+                  },
           ),
           if (_requiresEnrollment)
             SwitchListTile(
               title: const Text('Requiere Aprobación Manual'),
               value: _requiresApproval,
-              onChanged: widget.isLoading ? null : (val) {
-                setState(() {
-                  _requiresApproval = val;
-                });
-              },
+              onChanged: widget.isLoading
+                  ? null
+                  : (val) {
+                      setState(() {
+                        _requiresApproval = val;
+                      });
+                    },
             ),
           const SizedBox(height: 32),
           Row(
@@ -205,7 +241,9 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                   onPressed: widget.isLoading ? null : () => context.pop(),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text('Cancelar'),
                 ),
@@ -216,13 +254,18 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                   onPressed: widget.isLoading ? null : _submit,
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: widget.isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
                       : const Text('Crear'),
                 ),

@@ -78,7 +78,7 @@ class CatalogSelectorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Determine display name locally from the provided items
     String displayValue = 'Seleccionar...';
-    
+
     if (currentCode != null) {
       try {
         final match = items.firstWhere((item) => item.code == currentCode);

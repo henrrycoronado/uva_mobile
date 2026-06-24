@@ -4,10 +4,7 @@ import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 import '../../../features/programs/models/program_response_dto.dart';
 import 'edit_program_form_widget.dart';
 
-@widgetbook.UseCase(
-  name: 'Default',
-  type: EditProgramFormWidget,
-)
+@widgetbook.UseCase(name: 'Default', type: EditProgramFormWidget)
 Widget buildEditProgramFormWidgetUseCase(BuildContext context) {
   final program = ProgramResponseDto(
     uvaCode: 'PROG-001',

@@ -222,4 +222,3 @@ class _ProfileSettingsWidgetState extends State<ProfileSettingsWidget> {
     );
   }
 }
-

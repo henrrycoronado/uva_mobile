@@ -13,16 +13,19 @@ class UpdateProgramViewModel extends _$UpdateProgramViewModel {
   @override
   FutureOr<void> build() {}
 
-  Future<ProgramResponseDto?> updateProgram(String uvaCode, UpdateProgramDto dto) async {
+  Future<ProgramResponseDto?> updateProgram(
+    String uvaCode,
+    UpdateProgramDto dto,
+  ) async {
     state = const AsyncLoading();
-    
+
     try {
       final repository = ref.read(programRepositoryProvider);
       final updatedProgram = await repository.updateProgram(uvaCode, dto);
-      
+
       // Refresh the program list so the new data reflects on the main screen
       ref.read(programListViewModelProvider.notifier).refresh();
-      
+
       state = const AsyncData(null);
       return updatedProgram;
     } on ApiException catch (e) {

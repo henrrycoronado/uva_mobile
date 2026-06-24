@@ -14,9 +14,13 @@ class EnrollmentRepository {
   EnrollmentRepository(this._apiClient);
 
   Future<List<EnrollmentResponseDto>> getByActivity(String activityCode) async {
-    final response = await _apiClient.get('/api/v1/enrollments/by-activity/$activityCode');
+    final response = await _apiClient.get(
+      '/api/v1/enrollments/by-activity/$activityCode',
+    );
     final data = response as List;
-    return data.map((e) => EnrollmentResponseDto.fromJson(e as Map<String, dynamic>)).toList();
+    return data
+        .map((e) => EnrollmentResponseDto.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   Future<EnrollmentResponseDto> enroll(String activityCode) async {
@@ -31,4 +35,3 @@ class EnrollmentRepository {
     await _apiClient.patch('/api/v1/enrollments/$enrollmentCode/cancel');
   }
 }
-

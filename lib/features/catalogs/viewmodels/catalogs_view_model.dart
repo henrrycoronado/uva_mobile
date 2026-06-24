@@ -39,14 +39,22 @@ class CatalogsViewModel extends _$CatalogsViewModel {
     return CatalogsState();
   }
 
-  Future<void> fetchTypeCatalog(String groupName, {bool forceRefresh = false}) async {
+  Future<void> fetchTypeCatalog(
+    String groupName, {
+    bool forceRefresh = false,
+  }) async {
     if (!forceRefresh && state.cachedTypes.containsKey(groupName)) return;
 
     state = state.copyWith(isLoading: true);
     try {
       final repository = ref.read(catalogsRepositoryProvider);
-      final items = await repository.getTypes(groupName, forceRefresh: forceRefresh);
-      final updatedTypes = Map<String, List<CatalogItemDto>>.from(state.cachedTypes);
+      final items = await repository.getTypes(
+        groupName,
+        forceRefresh: forceRefresh,
+      );
+      final updatedTypes = Map<String, List<CatalogItemDto>>.from(
+        state.cachedTypes,
+      );
       updatedTypes[groupName] = items;
       state = state.copyWith(cachedTypes: updatedTypes, isLoading: false);
     } catch (e) {
@@ -55,14 +63,22 @@ class CatalogsViewModel extends _$CatalogsViewModel {
     }
   }
 
-  Future<void> fetchStateCatalog(String groupName, {bool forceRefresh = false}) async {
+  Future<void> fetchStateCatalog(
+    String groupName, {
+    bool forceRefresh = false,
+  }) async {
     if (!forceRefresh && state.cachedStates.containsKey(groupName)) return;
 
     state = state.copyWith(isLoading: true);
     try {
       final repository = ref.read(catalogsRepositoryProvider);
-      final items = await repository.getStates(groupName, forceRefresh: forceRefresh);
-      final updatedStates = Map<String, List<CatalogItemDto>>.from(state.cachedStates);
+      final items = await repository.getStates(
+        groupName,
+        forceRefresh: forceRefresh,
+      );
+      final updatedStates = Map<String, List<CatalogItemDto>>.from(
+        state.cachedStates,
+      );
       updatedStates[groupName] = items;
       state = state.copyWith(cachedStates: updatedStates, isLoading: false);
     } catch (e) {

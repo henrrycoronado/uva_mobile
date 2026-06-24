@@ -14,7 +14,9 @@ class ProgramListViewModel extends _$ProgramListViewModel {
     return _fetchPrograms();
   }
 
-  Future<List<ProgramResponseDto>> _fetchPrograms({bool forceRefresh = false}) async {
+  Future<List<ProgramResponseDto>> _fetchPrograms({
+    bool forceRefresh = false,
+  }) async {
     final repository = ref.read(programRepositoryProvider);
     return repository.getPrograms(forceRefresh: forceRefresh);
   }

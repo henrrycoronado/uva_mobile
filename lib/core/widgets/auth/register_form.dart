@@ -9,7 +9,13 @@ import '../common/custom_text_field.dart';
 
 class RegisterForm extends StatefulWidget {
   final bool isLoading;
-  final void Function(String firstName, String lastName, String email, String password) onRegister;
+  final void Function(
+    String firstName,
+    String lastName,
+    String email,
+    String password,
+  )
+  onRegister;
 
   const RegisterForm({
     super.key,
@@ -154,4 +160,3 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 }
-

@@ -22,10 +22,16 @@ class ActivityRepository implements IActivityRepository {
   ActivityRepository(this._apiClient);
 
   @override
-  Future<List<ActivityResponseDto>> getActivitiesByProgram(String programCode) async {
-    final response = await _apiClient.get('/api/v1/activities/by-program/$programCode');
+  Future<List<ActivityResponseDto>> getActivitiesByProgram(
+    String programCode,
+  ) async {
+    final response = await _apiClient.get(
+      '/api/v1/activities/by-program/$programCode',
+    );
     final data = response as List;
-    return data.map((e) => ActivityResponseDto.fromJson(e as Map<String, dynamic>)).toList();
+    return data
+        .map((e) => ActivityResponseDto.fromJson(e as Map<String, dynamic>))
+        .toList();
   }
 
   @override

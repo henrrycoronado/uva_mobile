@@ -8,11 +8,7 @@ class ActivityCardWidget extends StatelessWidget {
   final ActivityResponseDto activity;
   final VoidCallback? onTap;
 
-  const ActivityCardWidget({
-    super.key,
-    required this.activity,
-    this.onTap,
-  });
+  const ActivityCardWidget({super.key, required this.activity, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +55,9 @@ class ActivityCardWidget extends StatelessWidget {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 4),
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: AppColors.primary.withAlpha(25),
                           borderRadius: BorderRadius.circular(12),

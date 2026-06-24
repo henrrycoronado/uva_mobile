@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 import 'register_form.dart';
 
-@widgetbook.UseCase(
-  name: 'Default',
-  type: RegisterForm,
-)
+@widgetbook.UseCase(name: 'Default', type: RegisterForm)
 Widget buildRegisterFormUseCase(BuildContext context) {
   return Scaffold(
     body: Center(
@@ -19,10 +16,7 @@ Widget buildRegisterFormUseCase(BuildContext context) {
   );
 }
 
-@widgetbook.UseCase(
-  name: 'Loading state',
-  type: RegisterForm,
-)
+@widgetbook.UseCase(name: 'Loading state', type: RegisterForm)
 Widget buildRegisterFormLoadingUseCase(BuildContext context) {
   return Scaffold(
     body: Center(

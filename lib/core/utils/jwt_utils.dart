@@ -36,10 +36,11 @@ class JwtUtils {
   static List<String> getRolesFromToken(String token) {
     try {
       final payload = parseJwt(token);
-      
+
       // Standard .NET claim for roles
-      const roleClaim = 'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
-      
+      const roleClaim =
+          'http://schemas.microsoft.com/ws/2008/06/identity/claims/role';
+
       var roles = payload[roleClaim];
       roles ??= payload['roles'] ?? payload['role'];
 
@@ -48,7 +49,7 @@ class JwtUtils {
       } else if (roles is String) {
         return [roles];
       }
-      
+
       return [];
     } catch (e) {
       return [];

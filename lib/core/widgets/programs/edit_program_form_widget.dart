@@ -33,11 +33,21 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
   void initState() {
     super.initState();
     _nameController = TextEditingController(text: widget.initialData.name);
-    _acronymController = TextEditingController(text: widget.initialData.acronym ?? '');
-    _descriptionController = TextEditingController(text: widget.initialData.description ?? '');
-    _colorController = TextEditingController(text: widget.initialData.color ?? '');
-    _profilePhotoController = TextEditingController(text: widget.initialData.profilePhotoUrl ?? '');
-    _coverPhotoController = TextEditingController(text: widget.initialData.coverPhotoUrl ?? '');
+    _acronymController = TextEditingController(
+      text: widget.initialData.acronym ?? '',
+    );
+    _descriptionController = TextEditingController(
+      text: widget.initialData.description ?? '',
+    );
+    _colorController = TextEditingController(
+      text: widget.initialData.color ?? '',
+    );
+    _profilePhotoController = TextEditingController(
+      text: widget.initialData.profilePhotoUrl ?? '',
+    );
+    _coverPhotoController = TextEditingController(
+      text: widget.initialData.coverPhotoUrl ?? '',
+    );
   }
 
   @override
@@ -54,12 +64,24 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       final dto = UpdateProgramDto(
-        name: _nameController.text.trim().isEmpty ? null : _nameController.text.trim(),
-        acronym: _acronymController.text.trim().isEmpty ? null : _acronymController.text.trim(),
-        description: _descriptionController.text.trim().isEmpty ? null : _descriptionController.text.trim(),
-        color: _colorController.text.trim().isEmpty ? null : _colorController.text.trim(),
-        profilePhotoUrl: _profilePhotoController.text.trim().isEmpty ? null : _profilePhotoController.text.trim(),
-        coverPhotoUrl: _coverPhotoController.text.trim().isEmpty ? null : _coverPhotoController.text.trim(),
+        name: _nameController.text.trim().isEmpty
+            ? null
+            : _nameController.text.trim(),
+        acronym: _acronymController.text.trim().isEmpty
+            ? null
+            : _acronymController.text.trim(),
+        description: _descriptionController.text.trim().isEmpty
+            ? null
+            : _descriptionController.text.trim(),
+        color: _colorController.text.trim().isEmpty
+            ? null
+            : _colorController.text.trim(),
+        profilePhotoUrl: _profilePhotoController.text.trim().isEmpty
+            ? null
+            : _profilePhotoController.text.trim(),
+        coverPhotoUrl: _coverPhotoController.text.trim().isEmpty
+            ? null
+            : _coverPhotoController.text.trim(),
       );
       widget.onSubmit(dto);
     }
@@ -76,13 +98,17 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
             controller: _nameController,
             decoration: InputDecoration(
               labelText: 'Nombre del Programa',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.title),
             ),
             maxLength: 200,
             enabled: !widget.isLoading,
             validator: (value) {
-              if (value != null && value.trim().isNotEmpty && value.trim().length < 3) {
+              if (value != null &&
+                  value.trim().isNotEmpty &&
+                  value.trim().length < 3) {
                 return 'El nombre debe tener al menos 3 caracteres';
               }
               return null;
@@ -93,7 +119,9 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
             controller: _acronymController,
             decoration: InputDecoration(
               labelText: 'Acrónimo',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.short_text),
             ),
             maxLength: 10,
@@ -104,7 +132,9 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
             controller: _descriptionController,
             decoration: InputDecoration(
               labelText: 'Descripción',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.description),
             ),
             maxLines: 4,
@@ -116,7 +146,9 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
             decoration: InputDecoration(
               labelText: 'Color (Hex)',
               hintText: 'Ej. #FF0000',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.color_lens),
             ),
             enabled: !widget.isLoading,
@@ -126,7 +158,9 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
             controller: _profilePhotoController,
             decoration: InputDecoration(
               labelText: 'URL Foto de Perfil',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.image),
             ),
             enabled: !widget.isLoading,
@@ -136,7 +170,9 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
             controller: _coverPhotoController,
             decoration: InputDecoration(
               labelText: 'URL Foto de Portada',
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               prefixIcon: const Icon(Icons.wallpaper),
             ),
             enabled: !widget.isLoading,
@@ -149,7 +185,9 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
                   onPressed: widget.isLoading ? null : () => context.pop(),
                   style: OutlinedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: const Text('Cancelar'),
                 ),
@@ -160,13 +198,18 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
                   onPressed: widget.isLoading ? null : _submit,
                   style: FilledButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                   ),
                   child: widget.isLoading
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
                       : const Text('Guardar'),
                 ),

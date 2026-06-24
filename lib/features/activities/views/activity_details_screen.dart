@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../core/providers/user_profile_provider.dart';
@@ -75,6 +76,9 @@ class _ActivityDetailsContent extends ConsumerWidget {
         title: const Text('Detalle de Actividad'),
         backgroundColor: AppColors.primary,
         elevation: 1,
+        leading: context.canPop()
+            ? const BackButton()
+            : BackButton(onPressed: () => context.go('/home')),
         actions: [
           IconButton(
             icon: const Icon(Icons.share),

@@ -28,7 +28,10 @@ class ProgramDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final headerColor = _parseHexColor(program.color, theme.colorScheme.primaryContainer);
+    final headerColor = _parseHexColor(
+      program.color,
+      theme.colorScheme.primaryContainer,
+    );
     final displayState = stateName ?? program.state;
 
     return Column(
@@ -40,7 +43,8 @@ class ProgramDetailsWidget extends StatelessWidget {
           decoration: BoxDecoration(color: headerColor),
           child: Stack(
             children: [
-              if (program.coverPhotoUrl != null && program.coverPhotoUrl!.isNotEmpty)
+              if (program.coverPhotoUrl != null &&
+                  program.coverPhotoUrl!.isNotEmpty)
                 Positioned.fill(
                   child: Image.network(
                     program.coverPhotoUrl!,
@@ -56,13 +60,16 @@ class ProgramDetailsWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     // Avatar Profile Photo
-                    if (program.profilePhotoUrl != null && program.profilePhotoUrl!.isNotEmpty)
+                    if (program.profilePhotoUrl != null &&
+                        program.profilePhotoUrl!.isNotEmpty)
                       CircleAvatar(
                         radius: 40,
                         backgroundColor: Colors.white,
                         child: CircleAvatar(
                           radius: 38,
-                          backgroundImage: NetworkImage(program.profilePhotoUrl!),
+                          backgroundImage: NetworkImage(
+                            program.profilePhotoUrl!,
+                          ),
                         ),
                       )
                     else
@@ -72,14 +79,21 @@ class ProgramDetailsWidget extends StatelessWidget {
                         child: CircleAvatar(
                           radius: 38,
                           backgroundColor: headerColor.withValues(alpha: 0.5),
-                          child: Icon(Icons.business, size: 40, color: theme.colorScheme.onPrimaryContainer),
+                          child: Icon(
+                            Icons.business,
+                            size: 40,
+                            color: theme.colorScheme.onPrimaryContainer,
+                          ),
                         ),
                       ),
                     const SizedBox(width: 16),
                     // Title
                     Expanded(
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 8,
+                        ),
                         decoration: BoxDecoration(
                           color: Colors.black54,
                           borderRadius: BorderRadius.circular(8),
@@ -99,7 +113,7 @@ class ProgramDetailsWidget extends StatelessWidget {
             ],
           ),
         ),
-        
+
         Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -108,7 +122,8 @@ class ProgramDetailsWidget extends StatelessWidget {
               // Tags
               Row(
                 children: [
-                  if (program.acronym != null && program.acronym!.isNotEmpty) ...[
+                  if (program.acronym != null &&
+                      program.acronym!.isNotEmpty) ...[
                     Chip(
                       label: Text(program.acronym!),
                       backgroundColor: theme.colorScheme.secondaryContainer,
@@ -117,38 +132,45 @@ class ProgramDetailsWidget extends StatelessWidget {
                   ],
                   Chip(
                     label: Text(displayState),
-                    backgroundColor: _getStateColor(program.stateCode).withValues(alpha: 0.2),
+                    backgroundColor: _getStateColor(
+                      program.stateCode,
+                    ).withValues(alpha: 0.2),
                   ),
                 ],
               ),
               const SizedBox(height: 24),
-              
+
               // Description
-              if (program.description != null && program.description!.isNotEmpty) ...[
+              if (program.description != null &&
+                  program.description!.isNotEmpty) ...[
                 Text(
                   'Acerca del Programa',
-                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  program.description!,
-                  style: theme.textTheme.bodyLarge,
-                ),
+                Text(program.description!, style: theme.textTheme.bodyLarge),
                 const SizedBox(height: 24),
               ],
-              
+
               // Manager Info
               Card(
                 elevation: 0,
                 color: theme.colorScheme.surfaceContainerHighest,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Row(
                     children: [
                       CircleAvatar(
                         backgroundColor: theme.colorScheme.primary,
-                        child: Icon(Icons.person, color: theme.colorScheme.onPrimary),
+                        child: Icon(
+                          Icons.person,
+                          color: theme.colorScheme.onPrimary,
+                        ),
                       ),
                       const SizedBox(width: 16),
                       Expanded(
@@ -169,17 +191,19 @@ class ProgramDetailsWidget extends StatelessWidget {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
               ),
               const SizedBox(height: 24),
-              
+
               // Extra metadata
               Text(
                 'Detalles adicionales',
-                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
@@ -204,11 +228,16 @@ class ProgramDetailsWidget extends StatelessWidget {
 
   Color _getStateColor(String stateCode) {
     switch (stateCode.toUpperCase()) {
-      case 'ACTIVE': return Colors.green;
-      case 'INACTIVE': return Colors.grey;
-      case 'DRAFT': return Colors.orange;
-      case 'ARCHIVED': return Colors.red;
-      default: return Colors.blue;
+      case 'ACTIVE':
+        return Colors.green;
+      case 'INACTIVE':
+        return Colors.grey;
+      case 'DRAFT':
+        return Colors.orange;
+      case 'ARCHIVED':
+        return Colors.red;
+      default:
+        return Colors.blue;
     }
   }
 }

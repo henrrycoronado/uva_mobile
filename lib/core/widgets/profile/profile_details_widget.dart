@@ -119,11 +119,13 @@ class _ProfileDetailsWidgetState extends State<ProfileDetailsWidget> {
         fit: BoxFit.cover,
       );
     } else {
-      final finalUrl = photoUrl.startsWith('http') ? photoUrl : '$r2Url/$photoUrl';
-      final versionedUrl = finalUrl.contains('?') 
-          ? '$finalUrl&v=${widget.imageVersion}' 
+      final finalUrl = photoUrl.startsWith('http')
+          ? photoUrl
+          : '$r2Url/$photoUrl';
+      final versionedUrl = finalUrl.contains('?')
+          ? '$finalUrl&v=${widget.imageVersion}'
           : '$finalUrl?v=${widget.imageVersion}';
-      
+
       avatarChild = Image.network(
         versionedUrl,
         fit: BoxFit.cover,

@@ -38,7 +38,11 @@ class ProgramsScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.inbox, size: 64, color: theme.colorScheme.onSurfaceVariant),
+                  Icon(
+                    Icons.inbox,
+                    size: 64,
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'No hay programas disponibles',
@@ -52,7 +56,8 @@ class ProgramsScreen extends ConsumerWidget {
           }
 
           return RefreshIndicator(
-            onRefresh: () => ref.read(programListViewModelProvider.notifier).refresh(),
+            onRefresh: () =>
+                ref.read(programListViewModelProvider.notifier).refresh(),
             child: ListView.separated(
               padding: const EdgeInsets.all(16.0),
               itemCount: programs.length,
@@ -63,7 +68,10 @@ class ProgramsScreen extends ConsumerWidget {
                   program: program,
                   onTap: () {
                     // Navigate to details screen
-                    context.push('/programs/${program.uvaCode}', extra: program);
+                    context.push(
+                      '/programs/${program.uvaCode}',
+                      extra: program,
+                    );
                   },
                 );
               },
@@ -77,12 +85,16 @@ class ProgramsScreen extends ConsumerWidget {
             children: [
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
-              Text('Error al cargar programas', style: theme.textTheme.titleMedium),
+              Text(
+                'Error al cargar programas',
+                style: theme.textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
               ElevatedButton(
-                onPressed: () => ref.read(programListViewModelProvider.notifier).refresh(),
+                onPressed: () =>
+                    ref.read(programListViewModelProvider.notifier).refresh(),
                 child: const Text('Reintentar'),
-              )
+              ),
             ],
           ),
         ),

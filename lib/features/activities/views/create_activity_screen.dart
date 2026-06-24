@@ -10,10 +10,7 @@ import '../viewmodels/create_activity_viewmodel.dart';
 class CreateActivityScreen extends ConsumerWidget {
   final String programCode;
 
-  const CreateActivityScreen({
-    super.key,
-    required this.programCode,
-  });
+  const CreateActivityScreen({super.key, required this.programCode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -58,7 +55,9 @@ class CreateActivityScreen extends ConsumerWidget {
       body: catalogState.when(
         data: (types) {
           if (types.isEmpty) {
-            return const Center(child: Text('No hay tipos de actividad disponibles.'));
+            return const Center(
+              child: Text('No hay tipos de actividad disponibles.'),
+            );
           }
           return SingleChildScrollView(
             padding: const EdgeInsets.all(24.0),
@@ -67,7 +66,9 @@ class CreateActivityScreen extends ConsumerWidget {
               activityTypes: types,
               isLoading: state.isLoading,
               onSubmit: (dto) async {
-                await ref.read(createActivityViewModelProvider.notifier).createActivity(dto);
+                await ref
+                    .read(createActivityViewModelProvider.notifier)
+                    .createActivity(dto);
               },
             ),
           );

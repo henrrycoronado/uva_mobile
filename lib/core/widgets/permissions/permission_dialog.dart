@@ -26,13 +26,12 @@ class PermissionDialog extends StatelessWidget {
     return showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (ctx) =>
-          PermissionDialog(
-            title: title, 
-            description: description, 
-            icon: icon, 
-            onGoToSettings: onGoToSettings,
-          ),
+      builder: (ctx) => PermissionDialog(
+        title: title,
+        description: description,
+        icon: icon,
+        onGoToSettings: onGoToSettings,
+      ),
     );
   }
 
@@ -75,4 +74,3 @@ class PermissionDialog extends StatelessWidget {
     );
   }
 }
-

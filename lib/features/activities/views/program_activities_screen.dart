@@ -9,14 +9,13 @@ import '../viewmodels/activity_list_viewmodel.dart';
 class ProgramActivitiesScreen extends ConsumerWidget {
   final String programCode;
 
-  const ProgramActivitiesScreen({
-    super.key,
-    required this.programCode,
-  });
+  const ProgramActivitiesScreen({super.key, required this.programCode});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activitiesState = ref.watch(activityListViewModelProvider(programCode));
+    final activitiesState = ref.watch(
+      activityListViewModelProvider(programCode),
+    );
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -37,7 +36,9 @@ class ProgramActivitiesScreen extends ConsumerWidget {
           }
           return RefreshIndicator(
             onRefresh: () async {
-              await ref.read(activityListViewModelProvider(programCode).notifier).refresh();
+              await ref
+                  .read(activityListViewModelProvider(programCode).notifier)
+                  .refresh();
             },
             child: ListView.builder(
               padding: const EdgeInsets.all(16.0),

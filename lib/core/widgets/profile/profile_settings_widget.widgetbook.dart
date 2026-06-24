@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 import 'profile_settings_widget.dart';
 
-@widgetbook.UseCase(
-  name: 'Default',
-  type: ProfileSettingsWidget,
-)
+@widgetbook.UseCase(name: 'Default', type: ProfileSettingsWidget)
 Widget buildProfileSettingsWidgetUseCase(BuildContext context) {
   return Scaffold(
     body: Center(

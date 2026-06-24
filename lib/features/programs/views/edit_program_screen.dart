@@ -10,10 +10,7 @@ import '../viewmodels/update_program_viewmodel.dart';
 class EditProgramScreen extends ConsumerWidget {
   final ProgramResponseDto program;
 
-  const EditProgramScreen({
-    super.key,
-    required this.program,
-  });
+  const EditProgramScreen({super.key, required this.program});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +35,10 @@ class EditProgramScreen extends ConsumerWidget {
           );
           // Actualizamos la ruta para reflejar los nuevos datos en ProgramDetailsScreen
           // usando pushReplacement para forzar la recarga
-          context.pushReplacement('/programs/${program.uvaCode}', extra: next.value);
+          context.pushReplacement(
+            '/programs/${program.uvaCode}',
+            extra: next.value,
+          );
         }
       }
     });

@@ -32,6 +32,8 @@ class HomeViewModel extends _$HomeViewModel {
     if (forceRefresh) {
       state = const AsyncValue.loading();
     }
-    state = await AsyncValue.guard(() => _fetchDashboardData(forceRefresh: forceRefresh));
+    state = await AsyncValue.guard(
+      () => _fetchDashboardData(forceRefresh: forceRefresh),
+    );
   }
 }

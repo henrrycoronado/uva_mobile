@@ -23,6 +23,8 @@ class ProfileViewModel extends _$ProfileViewModel {
     if (forceRefresh) {
       state = const AsyncValue.loading();
     }
-    state = await AsyncValue.guard(() => _fetchProfile(forceRefresh: forceRefresh));
+    state = await AsyncValue.guard(
+      () => _fetchProfile(forceRefresh: forceRefresh),
+    );
   }
 }
