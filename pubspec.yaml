@@ -8,7 +8,9 @@ environment:
 
 dependencies:
   uva_design_system:
-    path: ../uva_design_system
+    git:
+      url: https://github.com/henrrycoronado/uva_design_system.git
+      ref: main
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter

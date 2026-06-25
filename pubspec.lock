@@ -1557,9 +1557,11 @@ packages:
   uva_design_system:
     dependency: "direct main"
     description:
-      path: "../uva_design_system"
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: "075f00b2c29d26b1497354b42124244abba4aa56"
+      url: "https://github.com/henrrycoronado/uva_design_system.git"
+    source: git
     version: "0.1.0+1"
   vector_graphics:
     dependency: transitive
