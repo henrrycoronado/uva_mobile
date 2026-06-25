@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../features/activities/models/create_activity_dto.dart';
 import '../../../features/activities/models/create_activity_rule_dto.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CreateActivityFormWidget extends StatefulWidget {
   final String programCode;
@@ -56,20 +57,16 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       if (_startDate == null || _endDate == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Las fechas de inicio y fin son obligatorias'),
-          ),
-        );
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.datesRequiredError)));
         return;
       }
       if (_startDate!.isAfter(_endDate!)) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-              'La fecha de inicio no puede ser posterior a la de fin',
-            ),
-          ),
+          SnackBar(content: Text(l10n.startDateBeforeEndDateError)),
         );
         return;
       }
@@ -133,6 +130,8 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     return Form(
       key: _formKey,
       child: Column(
@@ -141,7 +140,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
           TextFormField(
             controller: _nameController,
             decoration: InputDecoration(
-              labelText: 'Nombre de la Actividad *',
+              labelText: l10n.activityNameLabel,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -151,7 +150,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
             enabled: !widget.isLoading,
             validator: (value) {
               if (value == null || value.trim().isEmpty) {
-                return 'El nombre es requerido';
+                return l10n.nameRequired;
               }
               return null;
             },
@@ -159,7 +158,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
           const SizedBox(height: 16),
           DropdownButtonFormField<String>(
             decoration: InputDecoration(
-              labelText: 'Tipo de Actividad *',
+              labelText: l10n.activityTypeSelector,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -181,7 +180,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                   },
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Requerido';
+                return l10n.requiredField;
               }
               return null;
             },
@@ -190,7 +189,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
           TextFormField(
             controller: _descriptionController,
             decoration: InputDecoration(
-              labelText: 'Descripción',
+              labelText: l10n.descriptionLabel,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
@@ -210,7 +209,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                   icon: const Icon(Icons.calendar_today, size: 16),
                   label: Text(
                     _startDate == null
-                        ? 'Inicio *'
+                        ? '${l10n.startDateLabel} *'
                         : _startDate.toString().substring(0, 16),
                     style: const TextStyle(fontSize: 12),
                   ),
@@ -225,7 +224,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                   icon: const Icon(Icons.event_available, size: 16),
                   label: Text(
                     _endDate == null
-                        ? 'Fin *'
+                        ? '${l10n.endDateLabel} *'
                         : _endDate.toString().substring(0, 16),
                     style: const TextStyle(fontSize: 12),
                   ),
@@ -235,7 +234,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
           ),
           const SizedBox(height: 16),
           SwitchListTile(
-            title: const Text('Requiere Inscripción'),
+            title: Text(l10n.requiresRegistration),
             value: _requiresEnrollment,
             onChanged: widget.isLoading
                 ? null
@@ -246,12 +245,12 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                   },
           ),
           ExpansionTile(
-            title: const Text('Configuración Avanzada'),
+            title: Text(l10n.advancedSettings),
             childrenPadding: const EdgeInsets.all(16),
             children: [
               if (_requiresEnrollment)
                 SwitchListTile(
-                  title: const Text('Requiere Aprobación Manual'),
+                  title: Text(l10n.requiresApproval),
                   value: _requiresApproval,
                   onChanged: widget.isLoading
                       ? null
@@ -262,7 +261,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                         },
                 ),
               SwitchListTile(
-                title: const Text('Cuenta como Voluntariado'),
+                title: Text(l10n.countsAsVolunteer),
                 value: _countsVolunteerHours,
                 onChanged: widget.isLoading
                     ? null
@@ -276,7 +275,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
               TextFormField(
                 controller: _capacityController,
                 decoration: InputDecoration(
-                  labelText: 'Capacidad Total (opcional)',
+                  labelText: l10n.capacityOptional,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -289,20 +288,22 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
               TextFormField(
                 controller: _costController,
                 decoration: InputDecoration(
-                  labelText: 'Costo/Precio (opcional)',
+                  labelText: l10n.costOptional,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                   prefixIcon: const Icon(Icons.attach_money),
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 enabled: !widget.isLoading,
               ),
               const SizedBox(height: 16),
               TextFormField(
                 controller: _radiusController,
                 decoration: InputDecoration(
-                  labelText: 'Radio de Registro (metros)',
+                  labelText: l10n.radiusMeters,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -318,12 +319,15 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                     child: TextFormField(
                       controller: _latController,
                       decoration: InputDecoration(
-                        labelText: 'Latitud',
+                        labelText: l10n.latitudeLabel,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: true,
+                      ),
                       enabled: !widget.isLoading,
                     ),
                   ),
@@ -332,12 +336,15 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                     child: TextFormField(
                       controller: _lngController,
                       decoration: InputDecoration(
-                        labelText: 'Longitud',
+                        labelText: l10n.longitudeLabel,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                      keyboardType: const TextInputType.numberWithOptions(
+                        signed: true,
+                        decimal: true,
+                      ),
                       enabled: !widget.isLoading,
                     ),
                   ),
@@ -357,7 +364,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  child: const Text('Cancelar'),
+                  child: Text(l10n.cancel),
                 ),
               ),
               const SizedBox(width: 16),
@@ -371,15 +378,15 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                     ),
                   ),
                   child: widget.isLoading
-                      ? const SizedBox(
+                      ? SizedBox(
                           height: 20,
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            color: Colors.white,
+                            color: theme.colorScheme.onPrimary,
                           ),
                         )
-                      : const Text('Crear'),
+                      : Text(l10n.save),
                 ),
               ),
             ],

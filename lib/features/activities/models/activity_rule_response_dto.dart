@@ -28,7 +28,9 @@ class ActivityRuleResponseDto {
           : null,
       requiresApproval: json['requiresApproval'] as bool? ?? false,
       totalCapacity: json['totalCapacity'] as int?,
-      costAmount: json['costAmount'] != null ? (json['costAmount'] as num).toDouble() : null,
+      costAmount: json['costAmount'] != null
+          ? (json['costAmount'] as num).toDouble()
+          : null,
       costCurrency: json['costCurrency'] as String?,
       countsVolunteerHours: json['countsVolunteerHours'] as bool? ?? false,
     );

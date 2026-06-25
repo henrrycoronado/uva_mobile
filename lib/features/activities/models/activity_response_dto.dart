@@ -45,10 +45,18 @@ class ActivityResponseDto {
       endDate: DateTime.parse(json['endDate'] as String),
       state: json['state'] as String,
       stateCode: json['stateCode'] as String,
-      locationLatitude: json['locationLatitude'] != null ? (json['locationLatitude'] as num).toDouble() : null,
-      locationLongitude: json['locationLongitude'] != null ? (json['locationLongitude'] as num).toDouble() : null,
+      locationLatitude: json['locationLatitude'] != null
+          ? (json['locationLatitude'] as num).toDouble()
+          : null,
+      locationLongitude: json['locationLongitude'] != null
+          ? (json['locationLongitude'] as num).toDouble()
+          : null,
       requiresEnrollment: json['requiresEnrollment'] as bool? ?? false,
-      rule: json['rule'] != null ? ActivityRuleResponseDto.fromJson(json['rule'] as Map<String, dynamic>) : null,
+      rule: json['rule'] != null
+          ? ActivityRuleResponseDto.fromJson(
+              json['rule'] as Map<String, dynamic>,
+            )
+          : null,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../features/home/models/home_summary_dto.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
 
 class HomeCalendarHeatmapWidget extends StatelessWidget {
@@ -21,6 +22,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     final monthName = _getMonthName(month);
     final daysInMonth = DateUtils.getDaysInMonth(year, month);
@@ -34,11 +36,11 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: theme.colorScheme.shadow.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -52,7 +54,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  'Estadísticas de Actividad',
+                  l10n.homeVolunteerHoursChart,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -125,7 +127,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
               }
               final day = index - firstDayOffset + 1;
               final hours = hoursByDay[day] ?? 0.0;
-              return _buildDayCell(day, hours);
+              return _buildDayCell(day, hours, theme);
             },
           ),
           const SizedBox(height: 24),
@@ -135,23 +137,25 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
             children: [
               Text(
                 'Menos',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.hintColor,
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
               const SizedBox(width: 8),
-              _buildLegendCell(0.0),
+              _buildLegendCell(AppColors.primary.withValues(alpha: 0.1), theme),
               const SizedBox(width: 4),
-              _buildLegendCell(2.0),
+              _buildLegendCell(AppColors.primary.withValues(alpha: 0.4), theme),
               const SizedBox(width: 4),
-              _buildLegendCell(5.0),
+              _buildLegendCell(AppColors.primary.withValues(alpha: 0.7), theme),
               const SizedBox(width: 4),
-              _buildLegendCell(8.0),
+              _buildLegendCell(AppColors.primary, theme),
               const SizedBox(width: 8),
               Text(
                 'Más',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.grey[600],
+                style: TextStyle(
+                  fontSize: 12,
+                  color: theme.colorScheme.onSurfaceVariant,
                 ),
               ),
             ],
@@ -161,7 +165,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDayCell(int day, double hours) {
+  Widget _buildDayCell(int day, double hours, ThemeData theme) {
     Color cellColor = _getColorForHours(hours);
 
     return Container(
@@ -174,7 +178,9 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
           day.toString(),
           style: TextStyle(
             fontSize: 12,
-            color: hours > 4 ? Colors.white : Colors.black87,
+            color: hours > 4
+                ? theme.colorScheme.onPrimary
+                : theme.colorScheme.onSurface,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -182,13 +188,14 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildLegendCell(double hours) {
+  Widget _buildLegendCell(Color color, ThemeData theme) {
     return Container(
       width: 12,
       height: 12,
       decoration: BoxDecoration(
-        color: _getColorForHours(hours),
+        color: color,
         borderRadius: BorderRadius.circular(2),
+        border: Border.all(color: theme.colorScheme.outlineVariant, width: 0.5),
       ),
     );
   }

@@ -13,9 +13,7 @@ class CreateActivityViewModel extends _$CreateActivityViewModel {
   @override
   FutureOr<void> build() {}
 
-  Future<ActivityResponseDto?> createActivity(
-    CreateActivityDto dto,
-  ) async {
+  Future<ActivityResponseDto?> createActivity(CreateActivityDto dto) async {
     state = const AsyncLoading();
 
     try {

@@ -40,7 +40,7 @@ class ProgramsScreen extends ConsumerWidget {
                 Expanded(
                   child: TextField(
                     decoration: InputDecoration(
-                      hintText: 'Buscar programas...',
+                      hintText: l10n.programsSearchHint,
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -51,7 +51,7 @@ class ProgramsScreen extends ConsumerWidget {
                         borderSide: BorderSide(color: Colors.grey.shade300),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: theme.colorScheme.surface,
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 0,
                         horizontal: 16,
@@ -100,7 +100,7 @@ class ProgramsScreen extends ConsumerWidget {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'No hay programas disponibles',
+                          l10n.programsEmpty,
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),

@@ -6,6 +6,7 @@ import 'package:share_plus/share_plus.dart';
 import '../../../features/activities/models/activity_response_dto.dart';
 import '../../../features/activities/models/enrollment_response_dto.dart';
 import '../../../features/activities/viewmodels/enrollment_list_viewmodel.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../theme/app_colors.dart';
 
@@ -17,6 +18,7 @@ class ActivityDetailsContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final enrollmentsState = ref.watch(
       enrollmentListViewModelProvider(activity.uvaCode),
     );
@@ -37,7 +39,7 @@ class ActivityDetailsContent extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Detalle de Actividad'),
+        title: Text(l10n.details),
         backgroundColor: AppColors.primary,
         elevation: 1,
         leading: context.canPop()
@@ -104,7 +106,9 @@ class ActivityDetailsContent extends ConsumerWidget {
                   // Details Card
                   Card(
                     elevation: 0,
-                    color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                    color: theme.colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.3,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(color: theme.colorScheme.outlineVariant),
@@ -116,12 +120,18 @@ class ActivityDetailsContent extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.calendar_today, size: 20, color: AppColors.primary),
+                              const Icon(
+                                Icons.calendar_today,
+                                size: 20,
+                                color: AppColors.primary,
+                              ),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
-                                  'Inicio: ${_formatDate(activity.startDate)}\nFin: ${_formatDate(activity.endDate)}',
-                                  style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                                  '${l10n.startDateLabel}: ${_formatDate(activity.startDate)}\n${l10n.endDateLabel}: ${_formatDate(activity.endDate)}',
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ),
                             ],
@@ -135,7 +145,9 @@ class ActivityDetailsContent extends ConsumerWidget {
                   // Location Card
                   Card(
                     elevation: 0,
-                    color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                    color: theme.colorScheme.surfaceContainerHighest.withValues(
+                      alpha: 0.3,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(color: theme.colorScheme.outlineVariant),
@@ -147,19 +159,34 @@ class ActivityDetailsContent extends ConsumerWidget {
                         children: [
                           Row(
                             children: [
-                              const Icon(Icons.category, size: 20, color: AppColors.primary),
+                              const Icon(
+                                Icons.category,
+                                size: 20,
+                                color: AppColors.primary,
+                              ),
                               const SizedBox(width: 8),
-                              Text('Tipo: Actividad', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                              Text(
+                                '${l10n.activityTypeLabel}: Actividad',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ],
                           ),
                           const SizedBox(height: 8),
                           Row(
                             children: [
-                              const Icon(Icons.location_on, size: 20, color: AppColors.primary),
+                              const Icon(
+                                Icons.location_on,
+                                size: 20,
+                                color: AppColors.primary,
+                              ),
                               const SizedBox(width: 8),
                               Text(
-                                'Ubicación: ${activity.locationLatitude != null ? '${activity.locationLatitude}, ${activity.locationLongitude}' : 'Sede Central'}',
-                                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                                'Ubicación: ${activity.locationLatitude != null ? '${activity.locationLatitude}, ${activity.locationLongitude}' : l10n.hqLocation}',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ],
                           ),
@@ -167,26 +194,38 @@ class ActivityDetailsContent extends ConsumerWidget {
                           Container(
                             height: 150,
                             decoration: BoxDecoration(
-                              color: Colors.grey[300],
+                              color: theme.colorScheme.surfaceContainerHighest,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Stack(
                               children: [
-                                const Center(
-                                  child: Icon(Icons.map, size: 64, color: Colors.black26),
+                                Center(
+                                  child: Icon(
+                                    Icons.map,
+                                    size: 64,
+                                    color: theme.colorScheme.onSurfaceVariant
+                                        .withValues(alpha: 0.5),
+                                  ),
                                 ),
                                 Positioned(
                                   bottom: 8,
                                   right: 8,
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 4,
+                                    ),
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: theme.colorScheme.surface,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(
-                                      'RADIO: ${activity.rule?.registrationRadiusMeters ?? 500} MTRS',
-                                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black),
+                                      '${l10n.radiusLabel}: ${activity.rule?.registrationRadiusMeters ?? 500} ${l10n.metersLabel}',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.bold,
+                                        color: theme.colorScheme.onSurface,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -202,7 +241,7 @@ class ActivityDetailsContent extends ConsumerWidget {
                   if (activity.description != null &&
                       activity.description!.isNotEmpty) ...[
                     Text(
-                      'Acerca de la Actividad',
+                      l10n.aboutActivity,
                       style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -218,51 +257,76 @@ class ActivityDetailsContent extends ConsumerWidget {
                   // Reglas de la Actividad
                   Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: theme.colorScheme.outlineVariant),
+                      border: Border.all(
+                        color: theme.colorScheme.outlineVariant,
+                      ),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: ExpansionTile(
-                      title: const Text('Reglas de la Actividad', style: TextStyle(fontWeight: FontWeight.bold)),
+                      title: Text(
+                        l10n.activityRules,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       childrenPadding: const EdgeInsets.all(16),
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Requiere registro'),
-                            Switch(value: activity.requiresEnrollment, onChanged: null),
+                            Text(l10n.requiresRegistration),
+                            Switch(
+                              value: activity.requiresEnrollment,
+                              onChanged: null,
+                            ),
                           ],
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Requiere aprobación'),
-                            Switch(value: activity.rule?.requiresApproval ?? false, onChanged: null),
-                          ],
-                        ),
-                        const Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Capacidad'),
-                            Text('${activity.rule?.totalCapacity ?? 'Sin límite'}', style: const TextStyle(fontWeight: FontWeight.bold)),
-                          ],
-                        ),
-                        const Divider(),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text('Costo/Precio'),
-                            Text('\$${activity.rule?.costAmount?.toStringAsFixed(2) ?? '0.00'}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                            Text(l10n.requiresApproval),
+                            Switch(
+                              value: activity.rule?.requiresApproval ?? false,
+                              onChanged: null,
+                            ),
                           ],
                         ),
                         const Divider(),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Cuenta como voluntariado'),
+                            Text(l10n.capacity),
+                            Text(
+                              '${activity.rule?.totalCapacity ?? l10n.noLimit}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(l10n.costPrice),
+                            Text(
+                              '\$${activity.rule?.costAmount?.toStringAsFixed(2) ?? '0.00'}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(l10n.countsAsVolunteer),
                             Icon(
-                              activity.rule?.countsVolunteerHours == true ? Icons.check_circle : Icons.cancel,
-                              color: activity.rule?.countsVolunteerHours == true ? Colors.green : Colors.grey,
+                              activity.rule?.countsVolunteerHours == true
+                                  ? Icons.check_circle
+                                  : Icons.cancel,
+                              color: activity.rule?.countsVolunteerHours == true
+                                  ? Colors.green
+                                  : Colors.grey,
                             ),
                           ],
                         ),
@@ -276,7 +340,7 @@ class ActivityDetailsContent extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Inscritos (${enrollments.length})',
+                        '${l10n.enrolled} (${enrollments.length})',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -355,7 +419,7 @@ class ActivityDetailsContent extends ConsumerWidget {
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: Theme.of(context).colorScheme.shadow.withValues(alpha: 0.05),
             offset: const Offset(0, -4),
             blurRadius: 8,
           ),

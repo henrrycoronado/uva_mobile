@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../features/programs/models/program_response_dto.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ProgramDetailsWidget extends StatelessWidget {
   final ProgramResponseDto program;
@@ -30,6 +31,7 @@ class ProgramDetailsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
     final headerColor = _parseHexColor(
       program.color,
       theme.colorScheme.primaryContainer,
@@ -65,8 +67,11 @@ class ProgramDetailsWidget extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 4),
-                  color: Colors.white,
+                  border: Border.all(
+                    color: theme.colorScheme.surface,
+                    width: 4,
+                  ),
+                  color: theme.colorScheme.surface,
                 ),
                 child: CircleAvatar(
                   radius: 36,
@@ -133,9 +138,13 @@ class ProgramDetailsWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  displayState.toUpperCase(),
-                  style: const TextStyle(
-                    color: Colors.white,
+                  displayState.toUpperCase() == 'ACTIVE'
+                      ? l10n.statusActive
+                      : (displayState.toUpperCase() == 'INACTIVE'
+                            ? l10n.statusInactive
+                            : displayState.toUpperCase()),
+                  style: TextStyle(
+                    color: theme.colorScheme.onPrimary,
                     fontSize: 10,
                     fontWeight: FontWeight.bold,
                   ),
@@ -166,7 +175,7 @@ class ProgramDetailsWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'ENCARGADO',
+                            l10n.programManager.toUpperCase(),
                             style: theme.textTheme.labelSmall?.copyWith(
                               color: theme.colorScheme.onSurfaceVariant,
                               fontWeight: FontWeight.bold,
@@ -192,45 +201,45 @@ class ProgramDetailsWidget extends StatelessWidget {
               ],
 
               // Description
-              _buildSectionTitle(theme, 'Descripción'),
+              _buildSectionTitle(theme, l10n.descriptionLabel),
               const SizedBox(height: 12),
               Text(
                 program.description?.isNotEmpty == true
                     ? program.description!
-                    : 'Sin descripción disponible.',
+                    : l10n.noDescription,
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
 
               // Mission
-              _buildSectionTitle(theme, 'Misión'),
+              _buildSectionTitle(theme, l10n.missionLabel),
               const SizedBox(height: 12),
               Text(
                 program.missionStatement?.isNotEmpty == true
                     ? program.missionStatement!
-                    : 'Sin misión definida.',
+                    : l10n.noMission,
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
 
               // Schedule
-              _buildSectionTitle(theme, 'Información de Horarios'),
+              _buildSectionTitle(theme, l10n.scheduleLabel),
               const SizedBox(height: 12),
               Text(
                 program.scheduleInfo?.isNotEmpty == true
                     ? program.scheduleInfo!
-                    : 'Horarios no disponibles.',
+                    : l10n.noSchedule,
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
 
               // Contact Info
-              _buildSectionTitle(theme, 'Información de Contacto'),
+              _buildSectionTitle(theme, l10n.contactInfo),
               const SizedBox(height: 12),
               Text(
                 program.contactInfo?.isNotEmpty == true
                     ? program.contactInfo!
-                    : 'Contacto no disponible.',
+                    : l10n.noContact,
                 style: theme.textTheme.bodyMedium,
               ),
               const SizedBox(height: 100),

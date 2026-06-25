@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
 
 class HomeGoalProgressWidget extends StatelessWidget {
@@ -16,6 +17,7 @@ class HomeGoalProgressWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
 
     final totalGoal = personalGoal + scholarshipGoal;
     final progress = totalGoal > 0
@@ -26,11 +28,11 @@ class HomeGoalProgressWidget extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.05),
+            color: theme.colorScheme.shadow.withValues(alpha: 0.05),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -40,36 +42,37 @@ class HomeGoalProgressWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Progreso de metas',
+            l10n.homeGoalProgress,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: AppColors.darkSecondary,
             ),
           ),
           const SizedBox(height: 8),
           Text(
-            '¡Buen trabajo! Has completado el $progressPercentage% de tus metas este mes.',
-            style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.grey[600],
-            ),
+            progressPercentage >= 100
+                ? l10n.homeCongratsMsg
+                : l10n.homeKeepGoingMsg,
+            style: theme.textTheme.bodyMedium?.copyWith(color: theme.hintColor),
           ),
           const SizedBox(height: 24),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildCircularProgress(
-                title: 'Meta Personal',
+                title: l10n.homeGoalTitle,
                 current: currentMonthHours,
                 goal: personalGoal,
                 color: AppColors.primary,
                 theme: theme,
+                l10n: l10n,
               ),
               _buildCircularProgress(
-                title: 'Meta de Beca',
+                title: l10n.homeScholarshipProgress,
                 current: currentMonthHours,
                 goal: scholarshipGoal,
                 color: AppColors.lightTertiary,
                 theme: theme,
+                l10n: l10n,
               ),
             ],
           ),
@@ -84,6 +87,7 @@ class HomeGoalProgressWidget extends StatelessWidget {
     required double goal,
     required Color color,
     required ThemeData theme,
+    required AppLocalizations l10n,
   }) {
     final percentage = goal > 0 ? (current / goal).clamp(0.0, 1.0) : 0.0;
 
@@ -106,7 +110,6 @@ class HomeGoalProgressWidget extends StatelessWidget {
                   '${(percentage * 100).toInt()}%',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: AppColors.darkSecondary,
                   ),
                 ),
               ),
@@ -118,13 +121,12 @@ class HomeGoalProgressWidget extends StatelessWidget {
           title,
           style: theme.textTheme.bodyMedium?.copyWith(
             fontWeight: FontWeight.w600,
-            color: AppColors.darkSecondary,
           ),
         ),
         const SizedBox(height: 4),
         Text(
-          '${current.toStringAsFixed(1)} / ${goal.toStringAsFixed(0)} Hrs',
-          style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey[600]),
+          '${current.toStringAsFixed(1)} / ${goal.toStringAsFixed(0)} ${l10n.homeHoursLabel}',
+          style: theme.textTheme.bodySmall?.copyWith(color: theme.hintColor),
         ),
       ],
     );
