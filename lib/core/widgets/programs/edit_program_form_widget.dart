@@ -224,43 +224,7 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
             maxLines: 2,
             enabled: !widget.isLoading,
           ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _colorController,
-            decoration: InputDecoration(
-              labelText: 'Color (Hex)',
-              hintText: 'Ej. #FF0000',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              prefixIcon: const Icon(Icons.color_lens),
-            ),
-            enabled: !widget.isLoading,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _profilePhotoController,
-            decoration: InputDecoration(
-              labelText: 'URL Foto de Perfil',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              prefixIcon: const Icon(Icons.image),
-            ),
-            enabled: !widget.isLoading,
-          ),
-          const SizedBox(height: 16),
-          TextFormField(
-            controller: _coverPhotoController,
-            decoration: InputDecoration(
-              labelText: 'URL Foto de Portada',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              prefixIcon: const Icon(Icons.wallpaper),
-            ),
-            enabled: !widget.isLoading,
-          ),
+
           const SizedBox(height: 32),
           Row(
             children: [

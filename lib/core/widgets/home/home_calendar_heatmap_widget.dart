@@ -50,11 +50,13 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Estadísticas de Actividad',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkSecondary,
+              Expanded(
+                child: Text(
+                  'Estadísticas de Actividad',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               Row(
@@ -62,7 +64,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.chevron_left),
                     onPressed: onPreviousMonth,
-                    color: AppColors.darkSecondary,
+                    color: AppColors.primary,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -71,14 +73,14 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
                     '$monthName $year',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      color: theme.textTheme.bodyMedium?.color,
                     ),
                   ),
                   const SizedBox(width: 8),
                   IconButton(
                     icon: const Icon(Icons.chevron_right),
                     onPressed: onNextMonth,
-                    color: AppColors.darkSecondary,
+                    color: AppColors.primary,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
                   ),
@@ -97,7 +99,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
                       child: Text(
                         day,
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: Colors.grey[600],
+                          color: theme.hintColor,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -126,7 +128,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
               return _buildDayCell(day, hours);
             },
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 24),
           // Leyenda
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -134,7 +136,7 @@ class HomeCalendarHeatmapWidget extends StatelessWidget {
               Text(
                 'Menos',
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: Colors.grey[600],
+                  color: theme.hintColor,
                 ),
               ),
               const SizedBox(width: 8),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/theme/app_colors.dart';
 import '../../../features/programs/models/program_response_dto.dart';
 
 class ProgramCardWidget extends StatelessWidget {
@@ -69,8 +68,7 @@ class ProgramCardWidget extends StatelessWidget {
                   Text(
                     program.name,
                     style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.darkSecondary,
+                      color: theme.colorScheme.onSurface,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
