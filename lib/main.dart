@@ -6,12 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uva_design_system/theme/app_theme.dart';
 
 import 'core/local_storage/hive/cache_service.dart';
-
 import 'core/providers/preferences_provider.dart';
 import 'core/router/app_router.dart';
-import 'core/theme/app_theme.dart';
 import 'core/theme/locale_provider.dart';
 import 'core/theme/text_scale_provider.dart';
 import 'core/theme/theme_provider.dart';

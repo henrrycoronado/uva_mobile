@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/programs/edit_program_form_widget.dart';
+import 'package:uva_design_system/theme/app_colors.dart';
+import 'package:uva_design_system/widgets/programs/edit_program_form_widget.dart';
 import '../models/program_response_dto.dart';
 import '../viewmodels/update_program_viewmodel.dart';
 

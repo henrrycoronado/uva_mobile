@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uva_design_system/theme/app_colors.dart';
+import 'package:uva_design_system/widgets/home/home_calendar_heatmap_widget.dart';
+import 'package:uva_design_system/widgets/home/home_goal_progress_widget.dart';
+import 'package:uva_design_system/widgets/home/home_header_widget.dart';
+import 'package:uva_design_system/widgets/home/suggested_activities_widget.dart';
 
 import '../../../core/network/exceptions/offline_no_profile_exception.dart';
 import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/home/home_calendar_heatmap_widget.dart';
-import '../../../core/widgets/home/home_goal_progress_widget.dart';
-import '../../../core/widgets/home/home_header_widget.dart';
-import '../../../core/widgets/home/suggested_activities_widget.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/repositories/auth_repository.dart';
 import '../viewmodels/home_view_model.dart';

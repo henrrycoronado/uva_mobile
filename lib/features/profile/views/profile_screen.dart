@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uva_design_system/models/portfolio/contact_model.dart';
+import 'package:uva_design_system/models/profile/update_profile_dto.dart';
+import 'package:uva_design_system/theme/app_colors.dart';
+import 'package:uva_design_system/widgets/portfolio/portfolio_contact_widget.dart';
+import 'package:uva_design_system/widgets/profile/logout_button_widget.dart';
+import 'package:uva_design_system/widgets/profile/profile_actions_widget.dart';
+import 'package:uva_design_system/widgets/profile/profile_details_widget.dart';
+import 'package:uva_design_system/widgets/profile/profile_settings_widget.dart';
 
 import '../../../core/network/exceptions/offline_no_profile_exception.dart';
 import '../../../core/providers/secure_storage_provider.dart';
 import '../../../core/providers/user_roles_provider.dart';
 import '../../../core/router/app_routes.dart';
-import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/locale_provider.dart';
 import '../../../core/theme/text_scale_provider.dart';
 import '../../../core/theme/theme_provider.dart';
-import '../../../core/widgets/portfolio/portfolio_contact_widget.dart';
-import '../../../core/widgets/profile/logout_button_widget.dart';
-import '../../../core/widgets/profile/profile_actions_widget.dart';
-import '../../../core/widgets/profile/profile_details_widget.dart';
-import '../../../core/widgets/profile/profile_settings_widget.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/repositories/auth_repository.dart';
 import '../../catalogs/models/catalog_groups.dart';
 import '../../catalogs/viewmodels/catalogs_view_model.dart';
 import '../../home/viewmodels/home_view_model.dart';
-import '../models/update_profile_dto.dart';
+import '../../portfolio/viewmodels/portfolio_contact_view_model.dart';
 import '../repositories/profile_repository.dart';
 import '../viewmodels/profile_view_model.dart';
 
@@ -133,7 +136,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ref.read(textScaleProvider.notifier).changeScale(val),
                   ),
                   const SizedBox(height: 24),
-                  const PortfolioContactWidget(),
+                  _PortfolioContactConnector(),
                   const SizedBox(height: 32),
                   LogoutButtonWidget(
                     onLogout: () async {
@@ -195,6 +198,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           );
         },
       ),
+    );
+  }
+}
+
+/// Connects the design system PortfolioContactWidget to the Riverpod ViewModel.
+class _PortfolioContactConnector extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final contact = ref.watch(portfolioContactViewModelProvider);
+    final viewModel = ref.read(portfolioContactViewModelProvider.notifier);
+
+    return PortfolioContactWidget(
+      contact: contact,
+      onCopy: (text) async {
+        await Clipboard.setData(ClipboardData(text: text));
+      },
+      onSendEmail: (email, subject, body) async {
+        final emailTemplate = EmailTemplateModel(subject: subject, body: body);
+        return viewModel.sendEmail(email, emailTemplate);
+      },
+      onCallPhone: (phone) => viewModel.callPhone(phone),
     );
   }
 }

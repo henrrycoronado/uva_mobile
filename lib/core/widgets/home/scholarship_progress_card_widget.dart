@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:uva_design_system/models/home/scholarship_response_dto.dart';
+
 import '../../../../l10n/app_localizations.dart';
-import '../../../features/home/models/scholarship_response_dto.dart';
 
 class ScholarshipProgressCardWidget extends StatelessWidget {
   final ScholarshipResponseDto scholarship;

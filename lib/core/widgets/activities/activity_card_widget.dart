@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../features/activities/models/activity_response_dto.dart';
+import 'package:uva_design_system/models/activities/activity_response_dto.dart';
 import '../../theme/app_colors.dart';
 
 class ActivityCardWidget extends StatelessWidget {

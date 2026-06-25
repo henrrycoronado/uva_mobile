@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/activities/activity_card_widget.dart';
+import 'package:uva_design_system/theme/app_colors.dart';
+import 'package:uva_design_system/widgets/activities/activity_card_widget.dart';
 import '../viewmodels/activity_list_viewmodel.dart';
 
 class ProgramActivitiesScreen extends ConsumerWidget {

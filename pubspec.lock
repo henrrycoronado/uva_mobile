@@ -1554,6 +1554,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.5.3"
+  uva_design_system:
+    dependency: "direct main"
+    description:
+      path: "../uva_design_system"
+      relative: true
+    source: path
+    version: "0.1.0+1"
   vector_graphics:
     dependency: transitive
     description:

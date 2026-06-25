@@ -7,6 +7,8 @@ environment:
   sdk: ^3.12.0
 
 dependencies:
+  uva_design_system:
+    path: ../uva_design_system
   fl_chart: ^1.2.0
   flutter:
     sdk: flutter

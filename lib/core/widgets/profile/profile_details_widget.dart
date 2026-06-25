@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../../../features/catalogs/models/catalog_item_dto.dart';
-import '../../../../features/home/models/profile_response_dto.dart';
-import '../../../../features/profile/models/update_profile_dto.dart';
+import 'package:uva_design_system/models/catalogs/catalog_item_dto.dart';
+import 'package:uva_design_system/models/profile/profile_response_dto.dart';
+import 'package:uva_design_system/models/profile/update_profile_dto.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
 import '../../utils/image_utils.dart';

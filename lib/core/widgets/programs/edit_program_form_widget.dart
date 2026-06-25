@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../features/programs/models/program_response_dto.dart';
-import '../../../features/programs/models/update_program_dto.dart';
+import 'package:uva_design_system/models/programs/program_response_dto.dart';
+import 'package:uva_design_system/models/programs/update_program_dto.dart';
 
 class EditProgramFormWidget extends StatefulWidget {
   final ProgramResponseDto initialData;

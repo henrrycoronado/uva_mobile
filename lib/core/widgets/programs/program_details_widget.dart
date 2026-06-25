@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../features/programs/models/program_response_dto.dart';
+import 'package:uva_design_system/models/programs/program_response_dto.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../utils/image_utils.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../features/home/models/home_summary_dto.dart';
+import 'package:uva_design_system/models/home/home_summary_dto.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
 

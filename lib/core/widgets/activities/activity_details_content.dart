@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:share_plus/share_plus.dart';
 
-import '../../../features/activities/models/activity_response_dto.dart';
-import '../../../features/activities/models/enrollment_response_dto.dart';
+import 'package:uva_design_system/models/activities/activity_response_dto.dart';
+import 'package:uva_design_system/models/activities/enrollment_response_dto.dart';
 import '../../../features/activities/viewmodels/enrollment_list_viewmodel.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/user_profile_provider.dart';

@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import 'package:latlong2/latlong.dart';
 
-import '../../../features/activities/models/create_activity_dto.dart';
-import '../../../features/activities/models/create_activity_rule_dto.dart';
+import 'package:uva_design_system/models/activities/create_activity_dto.dart';
+import 'package:uva_design_system/models/activities/create_activity_rule_dto.dart';
 import '../../../l10n/app_localizations.dart';
 import '../common/location_picker_dialog.dart';
 

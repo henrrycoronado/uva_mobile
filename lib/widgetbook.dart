@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:uva_design_system/theme/app_colors.dart';
 import 'package:widgetbook/widgetbook.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
 
-import 'core/theme/app_colors.dart';
 import 'l10n/app_localizations.dart';
 import 'widgetbook.directories.g.dart';
 
