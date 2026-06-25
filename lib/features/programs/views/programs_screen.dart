@@ -16,6 +16,7 @@ class ProgramsScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final programsState = ref.watch(programListViewModelProvider);
+    final searchQuery = ref.watch(programSearchQueryProvider);
     final canCreate = ref.watch(isSuperUserOrAdminProvider).value ?? false;
 
     return Scaffold(
@@ -58,7 +59,9 @@ class ProgramsScreen extends ConsumerWidget {
                       ),
                     ),
                     onChanged: (value) {
-                      // TODO: Implement search filtering
+                      ref
+                          .read(programSearchQueryProvider.notifier)
+                          .setQuery(value);
                     },
                   ),
                 ),
@@ -88,19 +91,31 @@ class ProgramsScreen extends ConsumerWidget {
           Expanded(
             child: programsState.when(
               data: (programs) {
-                if (programs.isEmpty) {
+                final filteredPrograms = searchQuery.isEmpty
+                    ? programs
+                    : programs
+                          .where(
+                            (p) => p.name.toLowerCase().contains(
+                              searchQuery.toLowerCase(),
+                            ),
+                          )
+                          .toList();
+
+                if (filteredPrograms.isEmpty) {
                   return Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          Icons.inbox,
+                          Icons.search_off,
                           size: 64,
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          l10n.programsEmpty,
+                          searchQuery.isNotEmpty
+                              ? 'No se encontraron programas'
+                              : l10n.programsEmpty,
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: theme.colorScheme.onSurfaceVariant,
                           ),
@@ -118,10 +133,10 @@ class ProgramsScreen extends ConsumerWidget {
                       horizontal: 16.0,
                       vertical: 8.0,
                     ),
-                    itemCount: programs.length,
+                    itemCount: filteredPrograms.length,
                     separatorBuilder: (_, _) => const SizedBox(height: 16),
                     itemBuilder: (context, index) {
-                      final program = programs[index];
+                      final program = filteredPrograms[index];
                       return ProgramCardWidget(
                         program: program,
                         onTap: () {

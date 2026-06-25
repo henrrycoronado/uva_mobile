@@ -8,6 +8,16 @@ import '../repositories/program_repository.dart';
 part 'program_list_viewmodel.g.dart';
 
 @riverpod
+class ProgramSearchQuery extends _$ProgramSearchQuery {
+  @override
+  String build() => '';
+
+  void setQuery(String query) {
+    state = query;
+  }
+}
+
+@riverpod
 class ProgramListViewModel extends _$ProgramListViewModel {
   @override
   FutureOr<List<ProgramResponseDto>> build() async {
