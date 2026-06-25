@@ -2,7 +2,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/network/models/api_exceptions.dart';
 import '../models/activity_response_dto.dart';
-import '../models/create_activity_simple_dto.dart';
+import '../models/create_activity_dto.dart';
 import '../repositories/activity_repository.dart';
 import 'activity_list_viewmodel.dart';
 
@@ -14,13 +14,13 @@ class CreateActivityViewModel extends _$CreateActivityViewModel {
   FutureOr<void> build() {}
 
   Future<ActivityResponseDto?> createActivity(
-    CreateActivitySimpleDto dto,
+    CreateActivityDto dto,
   ) async {
     state = const AsyncLoading();
 
     try {
       final repository = ref.read(activityRepositoryProvider);
-      final newActivity = await repository.createSimple(dto);
+      final newActivity = await repository.create(dto);
 
       // Refresh the activities list for the program
       ref

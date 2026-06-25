@@ -233,7 +233,7 @@ class ProgramDetailsWidget extends StatelessWidget {
                     : 'Contacto no disponible.',
                 style: theme.textTheme.bodyMedium,
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 100),
             ],
           ),
         ),

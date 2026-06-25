@@ -14,7 +14,7 @@ class CatalogRepository {
   CatalogRepository(this._apiClient);
 
   Future<List<Map<String, dynamic>>> getActivityTypes() async {
-    final response = await _apiClient.get('/api/v1/catalogs/activity/types');
+    final response = await _apiClient.get('/api/v1/reference-catalog/types/activity');
     final data = response as List;
     return data.cast<Map<String, dynamic>>();
   }

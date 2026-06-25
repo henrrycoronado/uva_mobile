@@ -3,12 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/network/api/i_api_client.dart';
 import '../../../core/providers/api_client_provider.dart';
 import '../models/activity_response_dto.dart';
-import '../models/create_activity_simple_dto.dart';
+import '../models/create_activity_dto.dart';
 
 abstract class IActivityRepository {
   Future<List<ActivityResponseDto>> getActivitiesByProgram(String programCode);
   Future<ActivityResponseDto> getActivityByCode(String uvaCode);
-  Future<ActivityResponseDto> createSimple(CreateActivitySimpleDto dto);
+  Future<ActivityResponseDto> create(CreateActivityDto dto);
 }
 
 final activityRepositoryProvider = Provider<IActivityRepository>((ref) {
@@ -41,9 +41,9 @@ class ActivityRepository implements IActivityRepository {
   }
 
   @override
-  Future<ActivityResponseDto> createSimple(CreateActivitySimpleDto dto) async {
+  Future<ActivityResponseDto> create(CreateActivityDto dto) async {
     final response = await _apiClient.post(
-      '/api/v1/activities/simple',
+      '/api/v1/activities',
       body: dto.toJson(),
     );
     return ActivityResponseDto.fromJson(response as Map<String, dynamic>);

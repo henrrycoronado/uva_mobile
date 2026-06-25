@@ -101,22 +101,101 @@ class ActivityDetailsContent extends ConsumerWidget {
                   ),
                   const SizedBox(height: 24),
 
-                  // Dates
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.calendar_today,
-                        size: 20,
-                        color: AppColors.primary,
+                  // Details Card
+                  Card(
+                    elevation: 0,
+                    color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(color: theme.colorScheme.outlineVariant),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.calendar_today, size: 20, color: AppColors.primary),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  'Inicio: ${_formatDate(activity.startDate)}\nFin: ${_formatDate(activity.endDate)}',
+                                  style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Inicio: ${_formatDate(activity.startDate)}\nFin: ${_formatDate(activity.endDate)}',
-                          style: theme.textTheme.bodyMedium,
-                        ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Location Card
+                  Card(
+                    elevation: 0,
+                    color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                      side: BorderSide(color: theme.colorScheme.outlineVariant),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(Icons.category, size: 20, color: AppColors.primary),
+                              const SizedBox(width: 8),
+                              Text('Tipo: Actividad', style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600)),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on, size: 20, color: AppColors.primary),
+                              const SizedBox(width: 8),
+                              Text(
+                                'Ubicación: ${activity.locationLatitude != null ? '${activity.locationLatitude}, ${activity.locationLongitude}' : 'Sede Central'}',
+                                style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          Container(
+                            height: 150,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[300],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Stack(
+                              children: [
+                                const Center(
+                                  child: Icon(Icons.map, size: 64, color: Colors.black26),
+                                ),
+                                Positioned(
+                                  bottom: 8,
+                                  right: 8,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Text(
+                                      'RADIO: ${activity.rule?.registrationRadiusMeters ?? 500} MTRS',
+                                      style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                   const SizedBox(height: 24),
 
@@ -124,7 +203,7 @@ class ActivityDetailsContent extends ConsumerWidget {
                       activity.description!.isNotEmpty) ...[
                     Text(
                       'Acerca de la Actividad',
-                      style: theme.textTheme.titleMedium?.copyWith(
+                      style: theme.textTheme.titleLarge?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -133,8 +212,64 @@ class ActivityDetailsContent extends ConsumerWidget {
                       activity.description!,
                       style: theme.textTheme.bodyLarge,
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 24),
                   ],
+
+                  // Reglas de la Actividad
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: theme.colorScheme.outlineVariant),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ExpansionTile(
+                      title: const Text('Reglas de la Actividad', style: TextStyle(fontWeight: FontWeight.bold)),
+                      childrenPadding: const EdgeInsets.all(16),
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Requiere registro'),
+                            Switch(value: activity.requiresEnrollment, onChanged: null),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Requiere aprobación'),
+                            Switch(value: activity.rule?.requiresApproval ?? false, onChanged: null),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Capacidad'),
+                            Text('${activity.rule?.totalCapacity ?? 'Sin límite'}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Costo/Precio'),
+                            Text('\$${activity.rule?.costAmount?.toStringAsFixed(2) ?? '0.00'}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                          ],
+                        ),
+                        const Divider(),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text('Cuenta como voluntariado'),
+                            Icon(
+                              activity.rule?.countsVolunteerHours == true ? Icons.check_circle : Icons.cancel,
+                              color: activity.rule?.countsVolunteerHours == true ? Colors.green : Colors.grey,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 24),
 
                   // Participants
                   Row(

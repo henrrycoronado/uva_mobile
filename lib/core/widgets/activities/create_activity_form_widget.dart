@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../../features/activities/models/create_activity_simple_dto.dart';
+import '../../../features/activities/models/create_activity_dto.dart';
+import '../../../features/activities/models/create_activity_rule_dto.dart';
 
 class CreateActivityFormWidget extends StatefulWidget {
   final String programCode;
   final List<Map<String, dynamic>> activityTypes;
-  final Future<void> Function(CreateActivitySimpleDto dto) onSubmit;
+  final Future<void> Function(CreateActivityDto dto) onSubmit;
   final bool isLoading;
 
   const CreateActivityFormWidget({
@@ -27,16 +28,28 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  final _capacityController = TextEditingController();
+  final _costController = TextEditingController();
+  final _radiusController = TextEditingController();
+  final _latController = TextEditingController();
+  final _lngController = TextEditingController();
+
   String? _selectedTypeCode;
   DateTime? _startDate;
   DateTime? _endDate;
   bool _requiresEnrollment = false;
   bool _requiresApproval = false;
+  bool _countsVolunteerHours = false;
 
   @override
   void dispose() {
     _nameController.dispose();
     _descriptionController.dispose();
+    _capacityController.dispose();
+    _costController.dispose();
+    _radiusController.dispose();
+    _latController.dispose();
+    _lngController.dispose();
     super.dispose();
   }
 
@@ -61,7 +74,7 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
         return;
       }
 
-      final dto = CreateActivitySimpleDto(
+      final dto = CreateActivityDto(
         programCode: widget.programCode,
         activityTypeCode: _selectedTypeCode!,
         name: _nameController.text.trim(),
@@ -71,7 +84,15 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
         startDate: _startDate!,
         endDate: _endDate!,
         requiresEnrollment: _requiresEnrollment,
-        requiresApproval: _requiresApproval,
+        countsVolunteerHours: _countsVolunteerHours,
+        costAmount: double.tryParse(_costController.text),
+        locationLatitude: double.tryParse(_latController.text),
+        locationLongitude: double.tryParse(_lngController.text),
+        rule: CreateActivityRuleDto(
+          registrationRadiusMeters: int.tryParse(_radiusController.text) ?? 500,
+          requiresApproval: _requiresApproval,
+          totalCapacity: int.tryParse(_capacityController.text),
+        ),
       );
 
       widget.onSubmit(dto);
@@ -147,8 +168,8 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
             initialValue: _selectedTypeCode,
             items: widget.activityTypes.map((type) {
               return DropdownMenuItem<String>(
-                value: type['code'] as String,
-                child: Text(type['value'] as String),
+                value: type['uvaCode'] as String,
+                child: Text(type['name'] as String),
               );
             }).toList(),
             onChanged: widget.isLoading
@@ -224,18 +245,106 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                     });
                   },
           ),
-          if (_requiresEnrollment)
-            SwitchListTile(
-              title: const Text('Requiere Aprobación Manual'),
-              value: _requiresApproval,
-              onChanged: widget.isLoading
-                  ? null
-                  : (val) {
-                      setState(() {
-                        _requiresApproval = val;
-                      });
-                    },
-            ),
+          ExpansionTile(
+            title: const Text('Configuración Avanzada'),
+            childrenPadding: const EdgeInsets.all(16),
+            children: [
+              if (_requiresEnrollment)
+                SwitchListTile(
+                  title: const Text('Requiere Aprobación Manual'),
+                  value: _requiresApproval,
+                  onChanged: widget.isLoading
+                      ? null
+                      : (val) {
+                          setState(() {
+                            _requiresApproval = val;
+                          });
+                        },
+                ),
+              SwitchListTile(
+                title: const Text('Cuenta como Voluntariado'),
+                value: _countsVolunteerHours,
+                onChanged: widget.isLoading
+                    ? null
+                    : (val) {
+                        setState(() {
+                          _countsVolunteerHours = val;
+                        });
+                      },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _capacityController,
+                decoration: InputDecoration(
+                  labelText: 'Capacidad Total (opcional)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.group),
+                ),
+                keyboardType: TextInputType.number,
+                enabled: !widget.isLoading,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _costController,
+                decoration: InputDecoration(
+                  labelText: 'Costo/Precio (opcional)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.attach_money),
+                ),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                enabled: !widget.isLoading,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _radiusController,
+                decoration: InputDecoration(
+                  labelText: 'Radio de Registro (metros)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.radar),
+                ),
+                keyboardType: TextInputType.number,
+                enabled: !widget.isLoading,
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                      controller: _latController,
+                      decoration: InputDecoration(
+                        labelText: 'Latitud',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                      enabled: !widget.isLoading,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: TextFormField(
+                      controller: _lngController,
+                      decoration: InputDecoration(
+                        labelText: 'Longitud',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      keyboardType: const TextInputType.numberWithOptions(signed: true, decimal: true),
+                      enabled: !widget.isLoading,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
           const SizedBox(height: 32),
           Row(
             children: [
