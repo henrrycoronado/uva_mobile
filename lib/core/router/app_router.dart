@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:uva_design_system/widgets/layout/main_layout_screen.dart';
 
 import '../../features/activities/views/activity_details_screen.dart';
 import '../../features/activities/views/create_activity_screen.dart';
@@ -14,7 +15,6 @@ import '../../features/programs/views/edit_program_screen.dart';
 import '../../features/programs/views/program_details_screen.dart';
 import '../../features/programs/views/programs_screen.dart';
 import '../providers/secure_storage_provider.dart';
-import '../widgets/layout/main_layout_screen.dart';
 import 'app_routes.dart';
 
 final appRouterProvider = Provider<GoRouter>((ref) {

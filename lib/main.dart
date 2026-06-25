@@ -6,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_ce_flutter/hive_ce_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uva_design_system/l10n/app_localizations.dart' as ds_l10n;
 import 'package:uva_design_system/theme/app_theme.dart';
 
 import 'core/local_storage/hive/cache_service.dart';
@@ -56,7 +57,10 @@ class MainApp extends ConsumerWidget {
       themeMode: themeMode,
       locale: locale,
       supportedLocales: AppLocalizations.supportedLocales,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      localizationsDelegates: [
+        ...AppLocalizations.localizationsDelegates,
+        ...ds_l10n.AppLocalizations.localizationsDelegates,
+      ],
       routerConfig: router,
       builder: (context, child) {
         final data = MediaQuery.of(context);
