@@ -98,19 +98,39 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
             bottom: 24,
             left: 24,
             right: 24,
-            child: Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Toca en el mapa para seleccionar la ubicación exacta de la actividad.',
-                  style: theme.textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      'Toca en el mapa para mover el pin a la ubicación exacta de la actividad.',
+                      style: theme.textTheme.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 12),
+                FilledButton.icon(
+                  onPressed: () {
+                    Navigator.of(context).pop(_currentLocation);
+                  },
+                  icon: const Icon(Icons.check),
+                  label: const Text('Confirmar Ubicación'),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
