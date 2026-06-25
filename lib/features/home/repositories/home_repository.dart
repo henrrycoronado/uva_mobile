@@ -20,8 +20,9 @@ class HomeRepository {
     const key = 'profile_me';
     if (!forceRefresh) {
       final cached = await _cache.get(key, maxAge: const Duration(minutes: 5));
-      if (cached != null)
+      if (cached != null) {
         return ProfileResponseDto.fromJson(cached as Map<String, dynamic>);
+      }
     }
 
     try {
@@ -30,8 +31,9 @@ class HomeRepository {
       return ProfileResponseDto.fromJson(response as Map<String, dynamic>);
     } catch (e) {
       final fallback = await _cache.get(key, ignoreExpiration: true);
-      if (fallback != null)
+      if (fallback != null) {
         return ProfileResponseDto.fromJson(fallback as Map<String, dynamic>);
+      }
       throw const OfflineNoProfileException();
     }
   }
@@ -42,8 +44,9 @@ class HomeRepository {
     const key = 'volunteer_history_me';
     if (!forceRefresh) {
       final cached = await _cache.get(key, maxAge: const Duration(minutes: 5));
-      if (cached != null)
+      if (cached != null) {
         return VolunteerHistoryDto.fromJson(cached as Map<String, dynamic>);
+      }
     }
 
     try {
@@ -52,8 +55,9 @@ class HomeRepository {
       return VolunteerHistoryDto.fromJson(response as Map<String, dynamic>);
     } catch (e) {
       final fallback = await _cache.get(key, ignoreExpiration: true);
-      if (fallback != null)
+      if (fallback != null) {
         return VolunteerHistoryDto.fromJson(fallback as Map<String, dynamic>);
+      }
       rethrow;
     }
   }

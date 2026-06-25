@@ -20,12 +20,13 @@ class CatalogsRepository {
     final key = 'catalog_types_$typeGroup';
     if (!forceRefresh) {
       final cached = await _cache.get(key, maxAge: const Duration(minutes: 5));
-      if (cached != null)
+      if (cached != null) {
         return (cached as List)
             .map(
               (json) => CatalogItemDto.fromJson(json as Map<String, dynamic>),
             )
             .toList();
+      }
     }
 
     try {
@@ -38,12 +39,13 @@ class CatalogsRepository {
           .toList();
     } catch (e) {
       final fallback = await _cache.get(key, ignoreExpiration: true);
-      if (fallback != null)
+      if (fallback != null) {
         return (fallback as List)
             .map(
               (json) => CatalogItemDto.fromJson(json as Map<String, dynamic>),
             )
             .toList();
+      }
       rethrow;
     }
   }
@@ -55,12 +57,13 @@ class CatalogsRepository {
     final key = 'catalog_states_$stateGroup';
     if (!forceRefresh) {
       final cached = await _cache.get(key, maxAge: const Duration(minutes: 5));
-      if (cached != null)
+      if (cached != null) {
         return (cached as List)
             .map(
               (json) => CatalogItemDto.fromJson(json as Map<String, dynamic>),
             )
             .toList();
+      }
     }
 
     try {
@@ -73,12 +76,13 @@ class CatalogsRepository {
           .toList();
     } catch (e) {
       final fallback = await _cache.get(key, ignoreExpiration: true);
-      if (fallback != null)
+      if (fallback != null) {
         return (fallback as List)
             .map(
               (json) => CatalogItemDto.fromJson(json as Map<String, dynamic>),
             )
             .toList();
+      }
       rethrow;
     }
   }

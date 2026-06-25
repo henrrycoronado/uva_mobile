@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/catalog_item_dto.dart';
+import '../../../features/catalogs/models/catalog_item_dto.dart';
 
 class CatalogSelectorWidget extends StatelessWidget {
   final String label;

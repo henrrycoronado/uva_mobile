@@ -10,11 +10,11 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/locale_provider.dart';
 import '../../../core/theme/text_scale_provider.dart';
 import '../../../core/theme/theme_provider.dart';
+import '../../../core/widgets/portfolio/portfolio_contact_widget.dart';
 import '../../../core/widgets/profile/logout_button_widget.dart';
 import '../../../core/widgets/profile/profile_actions_widget.dart';
 import '../../../core/widgets/profile/profile_details_widget.dart';
 import '../../../core/widgets/profile/profile_settings_widget.dart';
-import '../../../features/portfolio/views/portfolio_contact_view.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/repositories/auth_repository.dart';
 import '../../catalogs/models/catalog_groups.dart';
@@ -133,7 +133,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ref.read(textScaleProvider.notifier).changeScale(val),
                   ),
                   const SizedBox(height: 24),
-                  const PortfolioContactView(),
+                  const PortfolioContactWidget(),
                   const SizedBox(height: 32),
                   LogoutButtonWidget(
                     onLogout: () async {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:widgetbook_annotation/widgetbook_annotation.dart' as widgetbook;
+
+import '../../../core/widgets/catalogs/catalog_selector_widget.dart';
 import '../models/catalog_item_dto.dart';
-import 'catalog_selector_widget.dart';
 
 @widgetbook.UseCase(name: 'Default', type: CatalogSelectorWidget)
 Widget buildCatalogSelectorWidgetUseCase(BuildContext context) {

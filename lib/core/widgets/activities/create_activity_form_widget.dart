@@ -129,8 +129,9 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
             maxLength: 200,
             enabled: !widget.isLoading,
             validator: (value) {
-              if (value == null || value.trim().isEmpty)
+              if (value == null || value.trim().isEmpty) {
                 return 'El nombre es requerido';
+              }
               return null;
             },
           ),
@@ -158,7 +159,9 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                     });
                   },
             validator: (value) {
-              if (value == null || value.isEmpty) return 'El tipo es requerido';
+              if (value == null || value.isEmpty) {
+                return 'Requerido';
+              }
               return null;
             },
           ),

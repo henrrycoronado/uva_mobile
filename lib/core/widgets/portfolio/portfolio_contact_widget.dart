@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../features/portfolio/models/contact_model.dart';
+import '../../../features/portfolio/viewmodels/portfolio_contact_view_model.dart';
+import '../../../features/portfolio/views/pdf_viewer_screen.dart';
 import '../../../l10n/app_localizations.dart';
-import '../models/contact_model.dart';
-import '../viewmodels/portfolio_contact_view_model.dart';
-import 'pdf_viewer_screen.dart';
 
-class PortfolioContactView extends ConsumerWidget {
-  const PortfolioContactView({super.key});
+class PortfolioContactWidget extends ConsumerWidget {
+  const PortfolioContactWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
