@@ -13,4 +13,3 @@ Widget buildSuggestedActivitiesWidgetUseCase(BuildContext context) {
     ),
   );
 }
-

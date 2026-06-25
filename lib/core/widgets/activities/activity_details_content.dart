@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../features/activities/models/activity_response_dto.dart';
@@ -199,14 +201,60 @@ class ActivityDetailsContent extends ConsumerWidget {
                             ),
                             child: Stack(
                               children: [
-                                Center(
-                                  child: Icon(
-                                    Icons.map,
-                                    size: 64,
-                                    color: theme.colorScheme.onSurfaceVariant
-                                        .withValues(alpha: 0.5),
+                                if (activity.locationLatitude != null &&
+                                    activity.locationLongitude != null)
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: FlutterMap(
+                                      options: MapOptions(
+                                        initialCenter: LatLng(
+                                          activity.locationLatitude!,
+                                          activity.locationLongitude!,
+                                        ),
+                                        initialZoom: 15.0,
+                                        interactionOptions:
+                                            const InteractionOptions(
+                                              flags:
+                                                  InteractiveFlag.all &
+                                                  ~InteractiveFlag.rotate,
+                                            ),
+                                      ),
+                                      children: [
+                                        TileLayer(
+                                          urlTemplate:
+                                              'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                                          userAgentPackageName:
+                                              'com.uvoluntapp.uva_mobile',
+                                        ),
+                                        MarkerLayer(
+                                          markers: [
+                                            Marker(
+                                              point: LatLng(
+                                                activity.locationLatitude!,
+                                                activity.locationLongitude!,
+                                              ),
+                                              width: 40,
+                                              height: 40,
+                                              child: const Icon(
+                                                Icons.location_pin,
+                                                color: Colors.red,
+                                                size: 40,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  )
+                                else
+                                  Center(
+                                    child: Icon(
+                                      Icons.map,
+                                      size: 64,
+                                      color: theme.colorScheme.onSurfaceVariant
+                                          .withValues(alpha: 0.5),
+                                    ),
                                   ),
-                                ),
                                 Positioned(
                                   bottom: 8,
                                   right: 8,

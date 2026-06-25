@@ -10,10 +10,7 @@ Widget buildGoalProgressChartWidgetUseCase(BuildContext context) {
         padding: const EdgeInsets.all(16.0),
         child: SizedBox(
           height: 200,
-          child: GoalProgressChartWidget(
-            validated: 25,
-            goal: 50,
-          ),
+          child: GoalProgressChartWidget(validated: 25, goal: 50),
         ),
       ),
     ),

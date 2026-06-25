@@ -6,14 +6,8 @@ import 'catalog_selector_widget.dart';
 @widgetbook.UseCase(name: 'Default', type: CatalogSelectorWidget)
 Widget buildCatalogSelectorWidgetUseCase(BuildContext context) {
   final items = [
-    CatalogItemDto(
-      code: 'ITM1',
-      name: 'Opción 1',
-    ),
-    CatalogItemDto(
-      code: 'ITM2',
-      name: 'Opción 2',
-    ),
+    CatalogItemDto(code: 'ITM1', name: 'Opción 1'),
+    CatalogItemDto(code: 'ITM2', name: 'Opción 2'),
   ];
 
   return Scaffold(

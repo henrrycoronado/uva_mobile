@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:latlong2/latlong.dart';
+
 import '../../../features/activities/models/create_activity_dto.dart';
 import '../../../features/activities/models/create_activity_rule_dto.dart';
 import '../../../l10n/app_localizations.dart';
+import '../common/location_picker_dialog.dart';
 
 class CreateActivityFormWidget extends StatefulWidget {
   final String programCode;
@@ -32,8 +35,8 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
   final _capacityController = TextEditingController();
   final _costController = TextEditingController();
   final _radiusController = TextEditingController();
-  final _latController = TextEditingController();
-  final _lngController = TextEditingController();
+
+  LatLng? _selectedLocation;
 
   String? _selectedTypeCode;
   DateTime? _startDate;
@@ -49,8 +52,6 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
     _capacityController.dispose();
     _costController.dispose();
     _radiusController.dispose();
-    _latController.dispose();
-    _lngController.dispose();
     super.dispose();
   }
 
@@ -83,8 +84,8 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
         requiresEnrollment: _requiresEnrollment,
         countsVolunteerHours: _countsVolunteerHours,
         costAmount: double.tryParse(_costController.text),
-        locationLatitude: double.tryParse(_latController.text),
-        locationLongitude: double.tryParse(_lngController.text),
+        locationLatitude: _selectedLocation?.latitude,
+        locationLongitude: _selectedLocation?.longitude,
         rule: CreateActivityRuleDto(
           registrationRadiusMeters: int.tryParse(_radiusController.text) ?? 500,
           requiresApproval: _requiresApproval,
@@ -313,42 +314,30 @@ class _CreateActivityFormWidgetState extends State<CreateActivityFormWidget> {
                 enabled: !widget.isLoading,
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: _latController,
-                      decoration: InputDecoration(
-                        labelText: l10n.latitudeLabel,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      keyboardType: const TextInputType.numberWithOptions(
-                        signed: true,
-                        decimal: true,
-                      ),
-                      enabled: !widget.isLoading,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _lngController,
-                      decoration: InputDecoration(
-                        labelText: l10n.longitudeLabel,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      keyboardType: const TextInputType.numberWithOptions(
-                        signed: true,
-                        decimal: true,
-                      ),
-                      enabled: !widget.isLoading,
-                    ),
-                  ),
-                ],
+              OutlinedButton.icon(
+                onPressed: widget.isLoading
+                    ? null
+                    : () async {
+                        final LatLng? result = await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => LocationPickerDialog(
+                              initialLocation: _selectedLocation,
+                            ),
+                            fullscreenDialog: true,
+                          ),
+                        );
+                        if (result != null) {
+                          setState(() {
+                            _selectedLocation = result;
+                          });
+                        }
+                      },
+                icon: const Icon(Icons.map),
+                label: Text(
+                  _selectedLocation == null
+                      ? 'Seleccionar Ubicación en Mapa'
+                      : 'Ubicación seleccionada',
+                ),
               ),
             ],
           ),

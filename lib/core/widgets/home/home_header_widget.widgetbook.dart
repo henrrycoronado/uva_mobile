@@ -8,9 +8,7 @@ Widget buildHomeHeaderWidgetUseCase(BuildContext context) {
     appBar: AppBar(title: const Text('Header Widget')),
     body: Padding(
       padding: const EdgeInsets.all(16.0),
-      child: HomeHeaderWidget(
-        firstName: 'Juan',
-      ),
+      child: HomeHeaderWidget(firstName: 'Juan'),
     ),
   );
 }

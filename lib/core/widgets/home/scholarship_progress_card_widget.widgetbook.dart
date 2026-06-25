@@ -30,7 +30,9 @@ Widget buildScholarshipProgressCardWidgetUseCase(BuildContext context) {
 }
 
 @widgetbook.UseCase(name: 'No Scholarship', type: ScholarshipProgressCardWidget)
-Widget buildScholarshipProgressCardWidgetNoScholarshipUseCase(BuildContext context) {
+Widget buildScholarshipProgressCardWidgetNoScholarshipUseCase(
+  BuildContext context,
+) {
   final scholarship = ScholarshipResponseDto(
     uvaCode: 'SCH002',
     profileCode: 'PRF001',
