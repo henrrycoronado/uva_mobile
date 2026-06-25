@@ -1644,7 +1644,7 @@ packages:
     source: hosted
     version: "1.2.1"
   widgetbook:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: widgetbook
       sha256: "7ce2a15c59990610aefb0a8a4d69f67dd842d41676b7af6b5b746aa3371d32cf"
@@ -1652,7 +1652,7 @@ packages:
     source: hosted
     version: "3.24.0"
   widgetbook_annotation:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: widgetbook_annotation
       sha256: ec98130f23579f14e304b6b45516612676ae4e0b0e6bb1debe9dba4ea604ab42
