@@ -5,11 +5,13 @@ import '../../../features/programs/models/program_response_dto.dart';
 class ProgramDetailsWidget extends StatelessWidget {
   final ProgramResponseDto program;
   final String? stateName;
+  final Widget? actionButtons;
 
   const ProgramDetailsWidget({
     super.key,
     required this.program,
     this.stateName,
+    this.actionButtons,
   });
 
   Color _parseHexColor(String? hexColor, Color fallback) {
@@ -33,188 +35,205 @@ class ProgramDetailsWidget extends StatelessWidget {
       theme.colorScheme.primaryContainer,
     );
     final displayState = stateName ?? program.state;
+    final acronymText = program.acronym?.isNotEmpty == true
+        ? program.acronym!
+        : 'UVA';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        // Header section
-        Container(
-          height: 200,
-          decoration: BoxDecoration(color: headerColor),
-          child: Stack(
-            children: [
-              if (program.coverPhotoUrl != null &&
-                  program.coverPhotoUrl!.isNotEmpty)
-                Positioned.fill(
-                  child: Image.network(
-                    program.coverPhotoUrl!,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => const SizedBox.shrink(),
-                  ),
+        // Header section (Cover + Avatar)
+        Stack(
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              height: 160,
+              decoration: BoxDecoration(color: headerColor),
+              child:
+                  program.coverPhotoUrl != null &&
+                      program.coverPhotoUrl!.isNotEmpty
+                  ? Image.network(
+                      program.coverPhotoUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, _, _) => const SizedBox.shrink(),
+                    )
+                  : null,
+            ),
+            Positioned(
+              bottom: -40,
+              left: 24,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 4),
+                  color: Colors.white,
                 ),
-              Positioned(
-                bottom: 16,
-                left: 16,
-                right: 16,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    // Avatar Profile Photo
-                    if (program.profilePhotoUrl != null &&
-                        program.profilePhotoUrl!.isNotEmpty)
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 38,
-                          backgroundImage: NetworkImage(
-                            program.profilePhotoUrl!,
-                          ),
-                        ),
-                      )
-                    else
-                      CircleAvatar(
-                        radius: 40,
-                        backgroundColor: Colors.white,
-                        child: CircleAvatar(
-                          radius: 38,
-                          backgroundColor: headerColor.withValues(alpha: 0.5),
-                          child: Icon(
-                            Icons.business,
-                            size: 40,
-                            color: theme.colorScheme.onPrimaryContainer,
-                          ),
-                        ),
-                      ),
-                    const SizedBox(width: 16),
-                    // Title
-                    Expanded(
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.black54,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          program.name,
+                child: CircleAvatar(
+                  radius: 36,
+                  backgroundColor:
+                      program.profilePhotoUrl != null &&
+                          program.profilePhotoUrl!.isNotEmpty
+                      ? Colors.transparent
+                      : theme.colorScheme.primaryContainer,
+                  backgroundImage:
+                      program.profilePhotoUrl != null &&
+                          program.profilePhotoUrl!.isNotEmpty
+                      ? NetworkImage(program.profilePhotoUrl!)
+                      : null,
+                  child:
+                      program.profilePhotoUrl == null ||
+                          program.profilePhotoUrl!.isEmpty
+                      ? Text(
+                          acronymText.length > 3
+                              ? acronymText.substring(0, 3)
+                              : acronymText,
                           style: theme.textTheme.titleLarge?.copyWith(
-                            color: Colors.white,
+                            color: theme.colorScheme.onPrimaryContainer,
                             fontWeight: FontWeight.bold,
                           ),
-                        ),
-                      ),
-                    ),
-                  ],
+                        )
+                      : null,
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+        const SizedBox(height: 48),
 
         Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Tags
-              Row(
-                children: [
-                  if (program.acronym != null &&
-                      program.acronym!.isNotEmpty) ...[
-                    Chip(
-                      label: Text(program.acronym!),
-                      backgroundColor: theme.colorScheme.secondaryContainer,
-                    ),
-                    const SizedBox(width: 8),
-                  ],
-                  Chip(
-                    label: Text(displayState),
-                    backgroundColor: _getStateColor(
-                      program.stateCode,
-                    ).withValues(alpha: 0.2),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-
-              // Description
-              if (program.description != null &&
-                  program.description!.isNotEmpty) ...[
-                Text(
-                  'Acerca del Programa',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Text(program.description!, style: theme.textTheme.bodyLarge),
-                const SizedBox(height: 24),
-              ],
-
-              // Manager Info
-              Card(
-                elevation: 0,
-                color: theme.colorScheme.surfaceContainerHighest,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: theme.colorScheme.primary,
-                        child: Icon(
-                          Icons.person,
-                          color: theme.colorScheme.onPrimary,
-                        ),
-                      ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Responsable del Programa',
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
-                            Text(
-                              program.managerName,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-
-              // Extra metadata
+              // Title
               Text(
-                'Detalles adicionales',
-                style: theme.textTheme.titleMedium?.copyWith(
+                program.name,
+                style: theme.textTheme.headlineSmall?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 8),
-              Text(
-                'Código de Programa: ${program.uvaCode}',
-                style: theme.textTheme.bodyMedium,
-              ),
               const SizedBox(height: 4),
+
+              // Acronym
+              if (program.acronym != null && program.acronym!.isNotEmpty) ...[
+                Text(
+                  'Acronym: ${program.acronym}',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey[700],
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+
+              // State Chip
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: _getStateColor(program.stateCode),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  displayState.toUpperCase(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              // Manager Info
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.surface,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: theme.colorScheme.outlineVariant),
+                ),
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: theme.colorScheme.primaryContainer,
+                      child: Icon(
+                        Icons.person,
+                        color: theme.colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'ENCARGADO',
+                            style: theme.textTheme.labelSmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            program.managerName,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+
+              if (actionButtons != null) ...[
+                actionButtons!,
+                const SizedBox(height: 24),
+              ],
+
+              // Description
+              _buildSectionTitle(theme, 'Descripción'),
+              const SizedBox(height: 12),
               Text(
-                'Fecha de Creación: ${_formatDate(program.createdAt)}',
+                program.description?.isNotEmpty == true
+                    ? program.description!
+                    : 'Sin descripción disponible.',
                 style: theme.textTheme.bodyMedium,
               ),
+              const SizedBox(height: 24),
+
+              // Mission
+              _buildSectionTitle(theme, 'Misión'),
+              const SizedBox(height: 12),
+              Text(
+                program.missionStatement?.isNotEmpty == true
+                    ? program.missionStatement!
+                    : 'Sin misión definida.',
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
+
+              // Schedule
+              _buildSectionTitle(theme, 'Información de Horarios'),
+              const SizedBox(height: 12),
+              Text(
+                program.scheduleInfo?.isNotEmpty == true
+                    ? program.scheduleInfo!
+                    : 'Horarios no disponibles.',
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 24),
+
+              // Contact Info
+              _buildSectionTitle(theme, 'Información de Contacto'),
+              const SizedBox(height: 12),
+              Text(
+                program.contactInfo?.isNotEmpty == true
+                    ? program.contactInfo!
+                    : 'Contacto no disponible.',
+                style: theme.textTheme.bodyMedium,
+              ),
+              const SizedBox(height: 32),
             ],
           ),
         ),
@@ -222,8 +241,20 @@ class ProgramDetailsWidget extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+  Widget _buildSectionTitle(ThemeData theme, String title) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text(
+          title,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8),
+        Divider(color: theme.colorScheme.outlineVariant),
+      ],
+    );
   }
 
   Color _getStateColor(String stateCode) {

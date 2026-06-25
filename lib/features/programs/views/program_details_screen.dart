@@ -5,9 +5,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../core/providers/user_roles_provider.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/activities/activity_card_widget.dart';
 import '../../../core/widgets/programs/program_details_widget.dart';
-import '../../activities/viewmodels/activity_list_viewmodel.dart';
 import '../models/program_response_dto.dart';
 import '../repositories/program_repository.dart';
 
@@ -61,6 +59,7 @@ class ProgramDetailsScreen extends ConsumerWidget {
     ProgramResponseDto program,
     bool canEdit,
   ) {
+    final theme = Theme.of(context);
     // Scaffold extrañado aquí para poder sobreescribir el AppBar con los datos correctos
     return Scaffold(
       appBar: AppBar(
@@ -94,98 +93,44 @@ class ProgramDetailsScreen extends ConsumerWidget {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ProgramDetailsWidget(program: program),
-            const Divider(height: 32, thickness: 8),
-            _buildActivitiesSection(context, ref, program.uvaCode, canEdit),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActivitiesSection(
-    BuildContext context,
-    WidgetRef ref,
-    String programCode,
-    bool canEdit,
-  ) {
-    final activitiesState = ref.watch(
-      activityListViewModelProvider(programCode),
-    );
-    final theme = Theme.of(context);
-
-    return Padding(
-      padding: const EdgeInsets.all(24.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: ProgramDetailsWidget(
+          program: program,
+          actionButtons: Row(
             children: [
-              Text(
-                'Actividades',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.darkSecondary,
+              Expanded(
+                child: FilledButton.icon(
+                  onPressed: () {
+                    context.push('/programs/${program.uvaCode}/activities');
+                  },
+                  icon: const Icon(Icons.list_alt, size: 18),
+                  label: const Text('Actividades'),
+                  style: FilledButton.styleFrom(
+                    backgroundColor: theme.colorScheme.primary,
+                    foregroundColor: theme.colorScheme.onPrimary,
+                  ),
                 ),
               ),
-              if (canEdit)
-                FilledButton.icon(
-                  onPressed: () {
-                    context.push('/programs/$programCode/activities/create');
-                  },
-                  icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Crear'),
-                  style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: AppColors.darkSecondary,
+              if (canEdit) ...[
+                const SizedBox(width: 16),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      context.push(
+                        '/programs/${program.uvaCode}/edit',
+                        extra: program,
+                      );
+                    },
+                    icon: const Icon(Icons.edit, size: 18),
+                    label: const Text('Editar'),
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: theme.colorScheme.onSurface,
+                    ),
                   ),
                 ),
+              ],
             ],
           ),
-          const SizedBox(height: 16),
-          activitiesState.when(
-            data: (activities) {
-              if (activities.isEmpty) {
-                return const Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(32.0),
-                    child: Text(
-                      'No hay actividades asociadas a este programa.',
-                    ),
-                  ),
-                );
-              }
-              // Mostrar solo hasta 3
-              final previewList = activities.take(3).toList();
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  ...previewList.map(
-                    (a) => ActivityCardWidget(
-                      activity: a,
-                      onTap: () {
-                        context.push('/activities/${a.uvaCode}');
-                      },
-                    ),
-                  ),
-                  if (activities.length > 3)
-                    OutlinedButton(
-                      onPressed: () {
-                        context.push('/programs/$programCode/activities');
-                      },
-                      child: const Text('Ver todas las actividades'),
-                    ),
-                ],
-              );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, st) => Center(child: Text('Error: $e')),
-          ),
-        ],
+        ),
       ),
     );
   }

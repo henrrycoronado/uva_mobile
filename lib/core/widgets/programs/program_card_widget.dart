@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/theme/app_colors.dart';
 import '../../../features/programs/models/program_response_dto.dart';
 
 class ProgramCardWidget extends StatelessWidget {
@@ -34,7 +35,6 @@ class ProgramCardWidget extends StatelessWidget {
       program.color,
       theme.colorScheme.primaryContainer,
     );
-    final displayState = stateName ?? program.state;
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -66,83 +66,29 @@ class ProgramCardWidget extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          program.name,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (program.acronym != null &&
-                          program.acronym!.isNotEmpty) ...[
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.secondaryContainer,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            program.acronym!,
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: theme.colorScheme.onSecondaryContainer,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  if (program.description != null &&
-                      program.description!.isNotEmpty) ...[
-                    Text(
-                      program.description!,
-                      style: theme.textTheme.bodyMedium,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  Text(
+                    program.name,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.darkSecondary,
                     ),
-                    const SizedBox(height: 12),
-                  ],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.person,
-                            size: 16,
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            program.managerName,
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
-                        ],
+                      Icon(
+                        Icons.person,
+                        size: 14,
+                        color: theme.colorScheme.onSurfaceVariant,
                       ),
-                      Chip(
-                        label: Text(
-                          displayState,
-                          style: theme.textTheme.labelSmall,
+                      const SizedBox(width: 4),
+                      Text(
+                        program.managerName,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
                         ),
-                        backgroundColor: _getStateColor(
-                          program.stateCode,
-                        ).withValues(alpha: 0.2),
-                        side: BorderSide.none,
-                        visualDensity: VisualDensity.compact,
-                        padding: EdgeInsets.zero,
                       ),
                     ],
                   ),
@@ -165,20 +111,5 @@ class ProgramCardWidget extends StatelessWidget {
             : Colors.white70,
       ),
     );
-  }
-
-  Color _getStateColor(String stateCode) {
-    switch (stateCode.toUpperCase()) {
-      case 'ACTIVE':
-        return Colors.green;
-      case 'INACTIVE':
-        return Colors.grey;
-      case 'DRAFT':
-        return Colors.orange;
-      case 'ARCHIVED':
-        return Colors.red;
-      default:
-        return Colors.blue;
-    }
   }
 }

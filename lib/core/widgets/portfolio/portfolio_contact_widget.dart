@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../features/portfolio/models/contact_model.dart';
 import '../../../features/portfolio/viewmodels/portfolio_contact_view_model.dart';
-import '../../../features/portfolio/views/pdf_viewer_screen.dart';
 import '../../../l10n/app_localizations.dart';
 
 class PortfolioContactWidget extends ConsumerWidget {
@@ -121,17 +120,6 @@ class PortfolioContactWidget extends ConsumerWidget {
               ],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.picture_as_pdf),
-            title: Text(l10n.supportPdfView),
-            trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const PdfViewerScreen()),
-              );
-            },
-          ),
-          const SizedBox(height: 8),
         ],
       ),
     );

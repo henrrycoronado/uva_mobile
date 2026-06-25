@@ -31,83 +31,139 @@ class ProgramsScreen extends ConsumerWidget {
         backgroundColor: AppColors.primary,
         elevation: 2,
       ),
-      body: programsState.when(
-        data: (programs) {
-          if (programs.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.inbox,
-                    size: 64,
-                    color: theme.colorScheme.onSurfaceVariant,
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Buscar programas...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: const BorderSide(color: Colors.grey),
+                      ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide(color: Colors.grey.shade300),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white,
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 0,
+                        horizontal: 16,
+                      ),
+                    ),
+                    onChanged: (value) {
+                      // TODO: Implement search filtering
+                    },
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'No hay programas disponibles',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: theme.colorScheme.onSurfaceVariant,
+                ),
+                if (canCreate) ...[
+                  const SizedBox(width: 12),
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.add,
+                        color: AppColors.darkSecondary,
+                      ),
+                      onPressed: () {
+                        context.push('/programs/create');
+                      },
                     ),
                   ),
                 ],
-              ),
-            );
-          }
+              ],
+            ),
+          ),
+          Expanded(
+            child: programsState.when(
+              data: (programs) {
+                if (programs.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.inbox,
+                          size: 64,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'No hay programas disponibles',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }
 
-          return RefreshIndicator(
-            onRefresh: () =>
-                ref.read(programListViewModelProvider.notifier).refresh(),
-            child: ListView.separated(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: programs.length,
-              separatorBuilder: (_, _) => const SizedBox(height: 16),
-              itemBuilder: (context, index) {
-                final program = programs[index];
-                return ProgramCardWidget(
-                  program: program,
-                  onTap: () {
-                    // Navigate to details screen
-                    context.push(
-                      '/programs/${program.uvaCode}',
-                      extra: program,
-                    );
-                  },
+                return RefreshIndicator(
+                  onRefresh: () =>
+                      ref.read(programListViewModelProvider.notifier).refresh(),
+                  child: ListView.separated(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    itemCount: programs.length,
+                    separatorBuilder: (_, _) => const SizedBox(height: 16),
+                    itemBuilder: (context, index) {
+                      final program = programs[index];
+                      return ProgramCardWidget(
+                        program: program,
+                        onTap: () {
+                          context.push(
+                            '/programs/${program.uvaCode}',
+                            extra: program,
+                          );
+                        },
+                      );
+                    },
+                  ),
                 );
               },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (error, stack) => Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Error al cargar programas',
+                      style: theme.textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () => ref
+                          .read(programListViewModelProvider.notifier)
+                          .refresh(),
+                      child: const Text('Reintentar'),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              Text(
-                'Error al cargar programas',
-                style: theme.textTheme.titleMedium,
-              ),
-              const SizedBox(height: 8),
-              ElevatedButton(
-                onPressed: () =>
-                    ref.read(programListViewModelProvider.notifier).refresh(),
-                child: const Text('Reintentar'),
-              ),
-            ],
           ),
-        ),
+        ],
       ),
-      floatingActionButton: canCreate
-          ? FloatingActionButton(
-              onPressed: () {
-                context.push('/programs/create');
-              },
-              backgroundColor: AppColors.primary,
-              child: const Icon(Icons.add, color: AppColors.darkSecondary),
-            )
-          : null,
     );
   }
 }

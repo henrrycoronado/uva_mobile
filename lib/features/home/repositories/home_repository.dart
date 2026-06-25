@@ -4,6 +4,7 @@ import '../../../core/local_storage/hive/cache_service.dart';
 import '../../../core/network/api/i_api_client.dart';
 import '../../../core/network/exceptions/offline_no_profile_exception.dart';
 import '../../../core/providers/api_client_provider.dart';
+import '../models/home_summary_dto.dart';
 import '../models/profile_response_dto.dart';
 import '../models/scholarship_response_dto.dart';
 import '../models/volunteer_history_dto.dart';
@@ -93,6 +94,42 @@ class HomeRepository {
               (e) => ScholarshipResponseDto.fromJson(e as Map<String, dynamic>),
             )
             .toList();
+      }
+      rethrow;
+    }
+  }
+
+  Future<HomeSummaryDto> getHomeSummary({
+    bool forceRefresh = false,
+    int? year,
+    int? month,
+  }) async {
+    final queryParams = <String, String>{};
+    if (year != null) queryParams['year'] = year.toString();
+    if (month != null) queryParams['month'] = month.toString();
+
+    final queryString = queryParams.entries
+        .map((e) => '${e.key}=${e.value}')
+        .join('&');
+    final url =
+        '/api/v1/reports/volunteers/me/home-summary${queryString.isNotEmpty ? '?$queryString' : ''}';
+    final key = 'home_summary_me_${year ?? 'curr'}_${month ?? 'curr'}';
+
+    if (!forceRefresh) {
+      final cached = await _cache.get(key, maxAge: const Duration(minutes: 5));
+      if (cached != null) {
+        return HomeSummaryDto.fromJson(cached as Map<String, dynamic>);
+      }
+    }
+
+    try {
+      final response = await _apiClient.get(url);
+      await _cache.set(key, response);
+      return HomeSummaryDto.fromJson(response as Map<String, dynamic>);
+    } catch (e) {
+      final fallback = await _cache.get(key, ignoreExpiration: true);
+      if (fallback != null) {
+        return HomeSummaryDto.fromJson(fallback as Map<String, dynamic>);
       }
       rethrow;
     }

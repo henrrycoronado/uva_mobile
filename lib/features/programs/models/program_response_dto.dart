@@ -6,6 +6,10 @@ class ProgramResponseDto {
   final String? color;
   final String? profilePhotoUrl;
   final String? coverPhotoUrl;
+  final String? missionStatement;
+  final String? scheduleInfo;
+  final String? contactInfo;
+  final String? leadershipInfo;
   final String managerProfileId;
   final String managerName;
   final String state;
@@ -20,6 +24,10 @@ class ProgramResponseDto {
     this.color,
     this.profilePhotoUrl,
     this.coverPhotoUrl,
+    this.missionStatement,
+    this.scheduleInfo,
+    this.contactInfo,
+    this.leadershipInfo,
     required this.managerProfileId,
     required this.managerName,
     required this.state,
@@ -36,6 +44,10 @@ class ProgramResponseDto {
       color: json['color'],
       profilePhotoUrl: json['profilePhotoUrl'],
       coverPhotoUrl: json['coverPhotoUrl'],
+      missionStatement: json['missionStatement'],
+      scheduleInfo: json['scheduleInfo'],
+      contactInfo: json['contactInfo'],
+      leadershipInfo: json['leadershipInfo'],
       managerProfileId: json['managerProfileId'] ?? '',
       managerName: json['managerName'] ?? '',
       state: json['state'] ?? '',

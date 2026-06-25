@@ -39,4 +39,3 @@ class ActivityDetailsScreen extends ConsumerWidget {
     );
   }
 }
-

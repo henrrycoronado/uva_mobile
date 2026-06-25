@@ -270,32 +270,44 @@ class _ProfileDetailsWidgetState extends State<ProfileDetailsWidget> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildAvatar(),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (!_isEditing) ...[
-                        Text(
-                          '${widget.profile.firstName} ${widget.profile.lastName}',
-                          style: theme.textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          widget.profile.email,
-                          style: theme.textTheme.bodyMedium,
-                        ),
-                        if (widget.profile.phone != null)
-                          Text(
-                            widget.profile.phone!,
-                            style: theme.textTheme.bodyMedium,
-                          ),
-                      ] else ...[
+            if (!_isEditing) ...[
+              Center(child: _buildAvatar()),
+              const SizedBox(height: 16),
+              Center(
+                child: Text(
+                  '${widget.profile.firstName} ${widget.profile.lastName}',
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              Center(
+                child: Text(
+                  widget.profile.email,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: Colors.grey,
+                  ),
+                ),
+              ),
+              if (widget.profile.phone != null)
+                Center(
+                  child: Text(
+                    widget.profile.phone!,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+            ] else ...[
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildAvatar(),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         TextField(
                           controller: _firstNameCtrl,
                           decoration: const InputDecoration(
@@ -318,18 +330,18 @@ class _ProfileDetailsWidgetState extends State<ProfileDetailsWidget> {
                           ),
                         ),
                       ],
-                    ],
+                    ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
+            ],
             const SizedBox(height: 16),
             if (!_isEditing) ...[
-              if (careerDisplay.isNotEmpty) _infoRow('Career', careerDisplay),
+              if (careerDisplay.isNotEmpty) _infoRow('Carrera', careerDisplay),
               if (widget.profile.housingLocation != null)
-                _infoRow('Housing', widget.profile.housingLocation!),
+                _infoRow('Dirección', widget.profile.housingLocation!),
               _infoRow(
-                'Goal Hours',
+                'Meta de Horas',
                 widget.profile.personalGoalHours.toString(),
               ),
             ] else ...[
@@ -384,8 +396,12 @@ class _ProfileDetailsWidgetState extends State<ProfileDetailsWidget> {
               SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.primary,
+                    side: const BorderSide(color: AppColors.primary),
+                  ),
                   onPressed: () => setState(() => _isEditing = true),
-                  child: Text(l10n.profileEdit),
+                  child: Text('Editar Perfil'),
                 ),
               ),
           ],

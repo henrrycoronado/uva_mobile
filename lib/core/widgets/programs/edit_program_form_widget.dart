@@ -28,6 +28,10 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
   late TextEditingController _colorController;
   late TextEditingController _profilePhotoController;
   late TextEditingController _coverPhotoController;
+  late TextEditingController _missionStatementController;
+  late TextEditingController _scheduleInfoController;
+  late TextEditingController _contactInfoController;
+  late TextEditingController _leadershipInfoController;
 
   @override
   void initState() {
@@ -48,6 +52,18 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
     _coverPhotoController = TextEditingController(
       text: widget.initialData.coverPhotoUrl ?? '',
     );
+    _missionStatementController = TextEditingController(
+      text: widget.initialData.missionStatement ?? '',
+    );
+    _scheduleInfoController = TextEditingController(
+      text: widget.initialData.scheduleInfo ?? '',
+    );
+    _contactInfoController = TextEditingController(
+      text: widget.initialData.contactInfo ?? '',
+    );
+    _leadershipInfoController = TextEditingController(
+      text: widget.initialData.leadershipInfo ?? '',
+    );
   }
 
   @override
@@ -58,6 +74,10 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
     _colorController.dispose();
     _profilePhotoController.dispose();
     _coverPhotoController.dispose();
+    _missionStatementController.dispose();
+    _scheduleInfoController.dispose();
+    _contactInfoController.dispose();
+    _leadershipInfoController.dispose();
     super.dispose();
   }
 
@@ -82,6 +102,18 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
         coverPhotoUrl: _coverPhotoController.text.trim().isEmpty
             ? null
             : _coverPhotoController.text.trim(),
+        missionStatement: _missionStatementController.text.trim().isEmpty
+            ? null
+            : _missionStatementController.text.trim(),
+        scheduleInfo: _scheduleInfoController.text.trim().isEmpty
+            ? null
+            : _scheduleInfoController.text.trim(),
+        contactInfo: _contactInfoController.text.trim().isEmpty
+            ? null
+            : _contactInfoController.text.trim(),
+        leadershipInfo: _leadershipInfoController.text.trim().isEmpty
+            ? null
+            : _leadershipInfoController.text.trim(),
       );
       widget.onSubmit(dto);
     }
@@ -138,6 +170,58 @@ class _EditProgramFormWidgetState extends State<EditProgramFormWidget> {
               prefixIcon: const Icon(Icons.description),
             ),
             maxLines: 4,
+            enabled: !widget.isLoading,
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _missionStatementController,
+            decoration: InputDecoration(
+              labelText: 'Misión',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              prefixIcon: const Icon(Icons.flag),
+            ),
+            maxLines: 3,
+            enabled: !widget.isLoading,
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _scheduleInfoController,
+            decoration: InputDecoration(
+              labelText: 'Información de Horarios',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              prefixIcon: const Icon(Icons.access_time),
+            ),
+            maxLines: 2,
+            enabled: !widget.isLoading,
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _contactInfoController,
+            decoration: InputDecoration(
+              labelText: 'Información de Contacto',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              prefixIcon: const Icon(Icons.contact_phone),
+            ),
+            maxLines: 2,
+            enabled: !widget.isLoading,
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _leadershipInfoController,
+            decoration: InputDecoration(
+              labelText: 'Información de Líderes/Colaboradores',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              prefixIcon: const Icon(Icons.people),
+            ),
+            maxLines: 2,
             enabled: !widget.isLoading,
           ),
           const SizedBox(height: 16),

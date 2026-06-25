@@ -5,10 +5,10 @@ import 'package:go_router/go_router.dart';
 import '../../../core/network/exceptions/offline_no_profile_exception.dart';
 import '../../../core/router/app_routes.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/widgets/home/activity_stats_chart_widget.dart';
-import '../../../core/widgets/home/goal_progress_chart_widget.dart';
+import '../../../core/widgets/home/home_calendar_heatmap_widget.dart';
+import '../../../core/widgets/home/home_goal_progress_widget.dart';
 import '../../../core/widgets/home/home_header_widget.dart';
-import '../../../core/widgets/home/scholarship_progress_card_widget.dart';
+import '../../../core/widgets/home/suggested_activities_widget.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../auth/repositories/auth_repository.dart';
 import '../viewmodels/home_view_model.dart';
@@ -37,11 +37,6 @@ class HomeScreen extends ConsumerWidget {
       ),
       body: homeStateAsync.when(
         data: (state) {
-          final isGoalReached =
-              state.history.validatedHours >= state.history.personalGoalHours &&
-              state.history.personalGoalHours > 0;
-          final isZero = state.history.validatedHours == 0;
-
           return RefreshIndicator(
             onRefresh: () => ref
                 .read(homeViewModelProvider.notifier)
@@ -52,28 +47,44 @@ class HomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  HomeHeaderWidget(
-                    firstName: state.profile.firstName,
-                    isGoalReached: isGoalReached,
-                    isZero: isZero,
+                  HomeHeaderWidget(firstName: state.profile.firstName),
+                  const SizedBox(height: 24),
+                  HomeGoalProgressWidget(
+                    personalGoal: state.summary.personalGoalHours,
+                    scholarshipGoal: state.summary.scholarshipGoalHours,
+                    currentMonthHours: state.summary.monthLoggedHours,
                   ),
                   const SizedBox(height: 24),
-                  GoalProgressChartWidget(
-                    validated: state.history.validatedHours,
-                    goal: state.history.personalGoalHours,
+                  HomeCalendarHeatmapWidget(
+                    month: state.currentMonth,
+                    year: state.currentYear,
+                    dailyActivities: state.summary.currentMonthDailyActivities,
+                    onPreviousMonth: () {
+                      final newMonth = state.currentMonth == 1
+                          ? 12
+                          : state.currentMonth - 1;
+                      final newYear = state.currentMonth == 1
+                          ? state.currentYear - 1
+                          : state.currentYear;
+                      ref
+                          .read(homeViewModelProvider.notifier)
+                          .changeMonth(newMonth, newYear);
+                    },
+                    onNextMonth: () {
+                      final newMonth = state.currentMonth == 12
+                          ? 1
+                          : state.currentMonth + 1;
+                      final newYear = state.currentMonth == 12
+                          ? state.currentYear + 1
+                          : state.currentYear;
+                      ref
+                          .read(homeViewModelProvider.notifier)
+                          .changeMonth(newMonth, newYear);
+                    },
                   ),
                   const SizedBox(height: 24),
-                  ActivityStatsChartWidget(
-                    activities: state.history.totalActivitiesParticipated
-                        .toDouble(),
-                    hours: state.history.totalLoggedHours,
-                  ),
+                  const SuggestedActivitiesWidget(),
                   const SizedBox(height: 24),
-                  if (state.activeScholarship != null)
-                    ScholarshipProgressCardWidget(
-                      scholarship: state.activeScholarship!,
-                      validatedHours: state.history.validatedHours,
-                    ),
                 ],
               ),
             ),

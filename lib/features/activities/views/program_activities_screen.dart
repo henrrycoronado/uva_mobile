@@ -20,7 +20,7 @@ class ProgramActivitiesScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Historial de Actividades'),
+        title: const Text('Actividades'),
         backgroundColor: AppColors.primary,
         elevation: 1,
         iconTheme: const IconThemeData(color: AppColors.darkSecondary),
@@ -29,34 +29,76 @@ class ProgramActivitiesScreen extends ConsumerWidget {
           color: AppColors.darkSecondary,
         ),
       ),
-      body: activitiesState.when(
-        data: (activities) {
-          if (activities.isEmpty) {
-            return const Center(child: Text('No hay actividades.'));
-          }
-          return RefreshIndicator(
-            onRefresh: () async {
-              await ref
-                  .read(activityListViewModelProvider(programCode).notifier)
-                  .refresh();
-            },
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: activities.length,
-              itemBuilder: (context, index) {
-                final activity = activities[index];
-                return ActivityCardWidget(
-                  activity: activity,
-                  onTap: () {
-                    context.push('/activities/${activity.uvaCode}');
+      body: Column(
+        children: [
+          // Search and add row
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            color: theme.colorScheme.surface,
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Buscar actividades...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      context.push('/programs/$programCode/activities/create');
+                    },
+                    icon: const Icon(Icons.add, color: AppColors.darkSecondary),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: activitiesState.when(
+              data: (activities) {
+                if (activities.isEmpty) {
+                  return const Center(child: Text('No hay actividades.'));
+                }
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    await ref
+                        .read(
+                          activityListViewModelProvider(programCode).notifier,
+                        )
+                        .refresh();
                   },
+                  child: ListView.builder(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount: activities.length,
+                    itemBuilder: (context, index) {
+                      final activity = activities[index];
+                      return ActivityCardWidget(
+                        activity: activity,
+                        onTap: () {
+                          context.push('/activities/${activity.uvaCode}');
+                        },
+                      );
+                    },
+                  ),
                 );
               },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, st) => Center(child: Text('Error: $e')),
             ),
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('Error: $e')),
+          ),
+        ],
       ),
     );
   }
