@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../features/programs/models/program_response_dto.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../utils/image_utils.dart';
 
 class ProgramDetailsWidget extends StatelessWidget {
   final ProgramResponseDto program;
@@ -51,11 +52,9 @@ class ProgramDetailsWidget extends StatelessWidget {
             Container(
               height: 160,
               decoration: BoxDecoration(color: headerColor),
-              child:
-                  program.coverPhotoUrl != null &&
-                      program.coverPhotoUrl!.isNotEmpty
+              child: getFullImageUrl(program.coverPhotoUrl) != null
                   ? Image.network(
-                      program.coverPhotoUrl!,
+                      getFullImageUrl(program.coverPhotoUrl)!,
                       fit: BoxFit.cover,
                       errorBuilder: (_, _, _) => const SizedBox.shrink(),
                     )
@@ -76,18 +75,14 @@ class ProgramDetailsWidget extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 36,
                   backgroundColor:
-                      program.profilePhotoUrl != null &&
-                          program.profilePhotoUrl!.isNotEmpty
+                      getFullImageUrl(program.profilePhotoUrl) != null
                       ? Colors.transparent
                       : theme.colorScheme.primaryContainer,
                   backgroundImage:
-                      program.profilePhotoUrl != null &&
-                          program.profilePhotoUrl!.isNotEmpty
-                      ? NetworkImage(program.profilePhotoUrl!)
+                      getFullImageUrl(program.profilePhotoUrl) != null
+                      ? NetworkImage(getFullImageUrl(program.profilePhotoUrl)!)
                       : null,
-                  child:
-                      program.profilePhotoUrl == null ||
-                          program.profilePhotoUrl!.isEmpty
+                  child: getFullImageUrl(program.profilePhotoUrl) == null
                       ? Text(
                           acronymText.length > 3
                               ? acronymText.substring(0, 3)

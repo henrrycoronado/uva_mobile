@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -8,6 +7,7 @@ import '../../../../features/home/models/profile_response_dto.dart';
 import '../../../../features/profile/models/update_profile_dto.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../theme/app_colors.dart';
+import '../../utils/image_utils.dart';
 import '../catalogs/catalog_selector_widget.dart';
 
 class ProfileDetailsWidget extends StatefulWidget {
@@ -109,25 +109,20 @@ class _ProfileDetailsWidgetState extends State<ProfileDetailsWidget> {
   }
 
   Widget _buildAvatar() {
-    final photoUrl = widget.profile.photoUrl;
-    final r2Url = dotenv.env['R2_PUBLIC_URL'] ?? '';
+    final finalUrl = getFullImageUrl(
+      widget.profile.photoUrl,
+      version: widget.imageVersion,
+    );
 
     Widget avatarChild;
-    if (photoUrl == null || photoUrl.contains('default') || photoUrl.isEmpty) {
+    if (finalUrl == null) {
       avatarChild = SvgPicture.asset(
         'assets/images/ProfileLogo.svg',
         fit: BoxFit.cover,
       );
     } else {
-      final finalUrl = photoUrl.startsWith('http')
-          ? photoUrl
-          : '$r2Url/$photoUrl';
-      final versionedUrl = finalUrl.contains('?')
-          ? '$finalUrl&v=${widget.imageVersion}'
-          : '$finalUrl?v=${widget.imageVersion}';
-
       avatarChild = Image.network(
-        versionedUrl,
+        finalUrl,
         fit: BoxFit.cover,
         errorBuilder: (_, _, _) => const Icon(Icons.person, size: 50),
       );

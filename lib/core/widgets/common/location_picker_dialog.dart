@@ -22,7 +22,8 @@ class _LocationPickerDialogState extends State<LocationPickerDialog> {
     super.initState();
     _mapController = MapController();
     // Default to Santa Cruz de la Sierra if no location is provided
-    _currentLocation = widget.initialLocation ?? const LatLng(-17.7833, -63.1821);
+    _currentLocation =
+        widget.initialLocation ?? const LatLng(-17.7833, -63.1821);
   }
 
   @override

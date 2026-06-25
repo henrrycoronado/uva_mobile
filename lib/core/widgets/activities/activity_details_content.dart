@@ -11,6 +11,7 @@ import '../../../features/activities/viewmodels/enrollment_list_viewmodel.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../providers/user_profile_provider.dart';
 import '../../theme/app_colors.dart';
+import '../../utils/image_utils.dart';
 
 class ActivityDetailsContent extends ConsumerWidget {
   final ActivityResponseDto activity;
@@ -64,9 +65,9 @@ class ActivityDetailsContent extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // Header Image
-            if (activity.photoUrl != null && activity.photoUrl!.isNotEmpty)
+            if (getFullImageUrl(activity.photoUrl) != null)
               Image.network(
-                activity.photoUrl!,
+                getFullImageUrl(activity.photoUrl)!,
                 height: 200,
                 fit: BoxFit.cover,
                 errorBuilder: (_, _, _) => _buildPlaceholderHeader(theme),

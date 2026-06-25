@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../features/programs/models/program_response_dto.dart';
+import '../../utils/image_utils.dart';
 
 class ProgramCardWidget extends StatelessWidget {
   final ProgramResponseDto program;
@@ -48,11 +49,9 @@ class ProgramCardWidget extends StatelessWidget {
             Container(
               height: 120,
               decoration: BoxDecoration(color: cardColor),
-              child:
-                  program.coverPhotoUrl != null &&
-                      program.coverPhotoUrl!.isNotEmpty
+              child: getFullImageUrl(program.coverPhotoUrl) != null
                   ? Image.network(
-                      program.coverPhotoUrl!,
+                      getFullImageUrl(program.coverPhotoUrl)!,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           _buildFallbackCover(cardColor, theme),
