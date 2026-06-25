@@ -34,7 +34,7 @@ final class CreateActivityViewModelProvider
 }
 
 String _$createActivityViewModelHash() =>
-    r'96fed38a94d293c4bef051108c2a807526c6291a';
+    r'0213bb107641314a4e6a9fe97f82339244f08d83';
 
 abstract class _$CreateActivityViewModel extends $AsyncNotifier<void> {
   FutureOr<void> build();
