@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <application
-        android:label="UvoluntApp"
+        android:label="U-VoluntApp_Movil"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
@@ -32,21 +32,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
             
-            <!-- App Links (Universal Links) for https://uvoluntapp.hc-server.xyz -->
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="uvoluntapp.hc-server.xyz" />
-                <data android:scheme="https" android:host="uvoluntapp.hc-server.xyz" />
-            </intent-filter>
-
-            <!-- Custom URL Scheme for uva:// -->
+            <!-- App Links (HTTP/HTTPS) without autoVerify for initial testing -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="uva" />
+                <data android:scheme="http" android:host="u-voluntapp.hc-server.xyz" />
+                <data android:scheme="https" android:host="u-voluntapp.hc-server.xyz" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.

@@ -1,4 +1,4 @@
-name: uva_mobile
+name: u_voluntapp_movil
 description: "A new Flutter project."
 publish_to: 'none'
 version: 0.1.0+1
@@ -40,6 +40,7 @@ dependencies:
   shared_preferences: ^2.5.5
   syncfusion_flutter_pdfviewer: ^33.2.13+1
   url_launcher: ^6.3.2
+  dio: ^5.11.0
 
 dev_dependencies:
   flutter_test:
@@ -55,7 +56,6 @@ flutter:
   generate: true
 
   assets:
-    - .env
     - assets/images/
     - assets/icons/
     - assets/pdfs/
