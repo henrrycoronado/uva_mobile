@@ -1,5 +1,5 @@
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 
 class LocationService {
   Future<bool> handlePermission() async {
@@ -31,7 +31,7 @@ class LocationService {
     if (!hasPermission) return null;
 
     return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high
+      locationSettings: const LocationSettings(accuracy: LocationAccuracy.high),
     );
   }
 }
