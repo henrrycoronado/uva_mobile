@@ -18,10 +18,10 @@ class LocationService {
         return false;
       }
     }
-    
+
     if (permission == LocationPermission.deniedForever) {
       return false;
-    } 
+    }
 
     return true;
   }

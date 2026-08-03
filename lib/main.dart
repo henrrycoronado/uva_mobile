@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   await dotenv.load(fileName: ".env");
 
   runApp(const ProviderScope(child: UVoluntAppMovil()));
@@ -22,9 +22,7 @@ class UVoluntAppMovil extends ConsumerWidget {
         useMaterial3: true,
       ),
       home: const Scaffold(
-        body: Center(
-          child: Text('U-VoluntApp Móvil - Esqueleto Base'),
-        ),
+        body: Center(child: Text('U-VoluntApp Móvil - Esqueleto Base')),
       ),
     );
   }
